@@ -5,13 +5,13 @@
 - Phone language: English
 - Android version: Pie(SDK: 28) or later
 
-## How to install
+## How to install (APK)
 
 - Enable "[install from unkown sources](https://developer.android.com/distribute/marketing-tools/alternative-distribution)" on the app you start the instalation from (ex: browser, file manager, etc...)
 
-## How to compile
+## How to compile and install (Android studio)
 
-- Clone the repo to android studio
+- Clone the repo to android studio and launch
 
 ## How to use
 
