@@ -7,11 +7,11 @@
 
 ## How to install
 
-- Enable "install from unkown sources" on the app you start the instalation from (ex: browser or file manager, etc...)
+- Enable "[install from unkown sources](https://developer.android.com/distribute/marketing-tools/alternative-distribution)" on the app you start the instalation from (ex: browser or file manager, etc...)
 
 ## How to compile
 
-- clone the repo to android studio
+- Clone the repo to android studio
 
 ## How to use
 
