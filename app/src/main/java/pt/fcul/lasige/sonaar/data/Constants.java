@@ -3,6 +3,7 @@ package pt.fcul.lasige.sonaar.data;
 import android.os.Environment;
 
 public class Constants {
+
     public static final boolean PRINT_API_RESPONSE = true;
     public static final int FACEBOOK_COUNTER = 9;
     public static final int TWITTER_COUNTER = 7;
