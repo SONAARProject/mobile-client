@@ -46,7 +46,6 @@ public class MediaPostCreationDetector {
     }
 
     public void setAltText(String altText) {
-        Log.d("ALT", altText);
         this.altText = altText;
     }
 
@@ -86,13 +85,13 @@ public class MediaPostCreationDetector {
         Counter counter = new Counter(0);
         switch (rootInActiveWindow.getPackageName().toString()){
             case Constants.FACEBOOK_PACKAGE:
-                treeCrawlers.runNodeTreeFacebook(rootInActiveWindow, counter);
                 //TODO IMPLEMENT
+                treeCrawlers.runNodeTreeFacebook(rootInActiveWindow, counter);
                 analyseTreeRun(Constants.FACEBOOK_PACKAGE, counter, null);
                 break;
             case Constants.INSTAGRAM_PACKAGE:
-                treeCrawlers.runNodeTreeInstagram(rootInActiveWindow, counter);
                 //TODO IMPLEMENT
+                treeCrawlers.runNodeTreeInstagram(rootInActiveWindow, counter);
                 analyseTreeRun(Constants.INSTAGRAM_PACKAGE, counter, null);
                 break;
             case Constants.TWITTER_PACKAGE:

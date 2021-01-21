@@ -26,10 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.READ_EXTERNAL_STORAGE) ==
-                PackageManager.PERMISSION_GRANTED) {
-            // You can use the API that requires the permission.
-
-        } else {
+                PackageManager.PERMISSION_GRANTED) {} else {
             // You can directly ask for the permission.
             requestPermissions(new String[] { Manifest.permission.READ_EXTERNAL_STORAGE }, REQUEST_CODE);
         }

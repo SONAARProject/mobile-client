@@ -31,25 +31,13 @@ public class NotificationController {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         switch (socialNetworkName){
             case "Facebook":
-                if(!isNotificationLive(Constants.FACEBOOK_NOTIFICATION_ID)) {
-                    if(!canISendNotifications)
-                        return;
-
-                    manager.notify(Constants.FACEBOOK_NOTIFICATION_ID, buildNotification(socialNetworkName, ""));
-                    coolDownNotifications();
-                }
+                //TODO IMPLEMENT
+            case "Instagram":
+                //TODO IMPLEMENT
             case "Twitter":
                 if(!isNotificationLive(Constants.TWITTER_NOTIFICATION_ID)) {
-                    manager.notify(Constants.TWITTER_NOTIFICATION_ID, buildNotification(socialNetworkName, altText));
-
-                }
-            case "Instagram":
-                if(!isNotificationLive(Constants.INSTAGRAM_NOTIFICATION_ID)) {
-                    if(!canISendNotifications)
-                        return;
-
-                    manager.notify(Constants.INSTAGRAM_NOTIFICATION_ID, buildNotification(socialNetworkName, ""));
-                    coolDownNotifications();
+                    if (!altText.isEmpty())
+                        manager.notify(Constants.TWITTER_NOTIFICATION_ID, buildNotification(socialNetworkName, altText));
                 }
         }
     }
