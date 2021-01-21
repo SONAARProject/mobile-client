@@ -1,4 +1,4 @@
-package pt.fcul.lasige.sonaar.util;
+package pt.fcul.lasige.sonaar.data;
 
 public class Counter {
     int number;

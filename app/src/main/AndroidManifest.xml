@@ -24,7 +24,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ScreenShotCapture"/>
         <service
             android:name="pt.fcul.lasige.sonaar.accessibleservice.AccessibilityServiceClass"
             android:enabled="true"

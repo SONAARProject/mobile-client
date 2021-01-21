@@ -1,28 +1,31 @@
 package pt.fcul.lasige.sonaar;
 
 import android.accessibilityservice.AccessibilityService;
-import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.view.accessibility.AccessibilityWindowInfo;
-
-import androidx.annotation.RequiresApi;
-
-import java.io.File;
 
 import pt.fcul.lasige.sonaar.api.APIClient;
-import pt.fcul.lasige.sonaar.util.Constants;
-import pt.fcul.lasige.sonaar.util.Counter;
+import pt.fcul.lasige.sonaar.api.APIMessageHandler;
+import pt.fcul.lasige.sonaar.util.AccessibilityServiceUtils;
+import pt.fcul.lasige.sonaar.data.Constants;
+import pt.fcul.lasige.sonaar.data.Counter;
+import pt.fcul.lasige.sonaar.util.ImageUtils;
+import pt.fcul.lasige.sonaar.util.TreeCrawlers;
 
 
 public class MediaPostCreationDetector {
 
+    private boolean canITakeScreenshot = true;
+    private boolean sendAltTextToAPI = false;
     private AccessibilityService service;
     private NotificationController notificationController;
-    int c = 0;
+    private APIMessageHandler messageHandler;
+    private byte[] currentImage;
+    private String altText;
+    private TreeCrawlers treeCrawlers;
 
     private static MediaPostCreationDetector mediaPostCreationDetector;
 
@@ -33,255 +36,146 @@ public class MediaPostCreationDetector {
         return mediaPostCreationDetector;
     }
 
-    private MediaPostCreationDetector() {}
+    private MediaPostCreationDetector() { }
 
     public void setService(AccessibilityService service) {
         this.service = service;
         notificationController = new NotificationController(service.getApplicationContext());
+        treeCrawlers = new TreeCrawlers();
+        messageHandler = new APIMessageHandler(notificationController);
     }
 
-    public void logNodeTree(AccessibilityNodeInfo node, int indent) {
+    public void setAltText(String altText) {
+        Log.d("ALT", altText);
+        this.altText = altText;
+    }
 
-        if (node == null) {
+    public void setSendAltTextToAPI(boolean sendAltTextToAPI) {
+        this.sendAltTextToAPI = sendAltTextToAPI;
+    }
+
+
+    public void detectPostSubmission(AccessibilityNodeInfo source) {
+        if(source == null ||
+                source.getPackageName() == null ||
+                source.getClassName() == null ||
+                source.getText() == null)
             return;
-        }
-        String indentStr = new String(new char[indent * 3]).replace('\0', ' ');
-        Log.d("ARVORE", "" + String.format("%s NODE: %s", indentStr, node.toString()));
-        //Log.d("ARVORE" , String.format("%s CLASS: %s", indentStr, node.getClassName()));
-        //Log.d("ARVORE" , String.format("%s PACKAGE: %s", indentStr, node.getPackageName()));
 
-        if (node.getContentDescription() != null || node.getText() != null) {
-            Log.d("ARVORE", String.format("%s DESCRIPTION: %s", indentStr, node.getContentDescription()));
-            Log.d("ARVORE", String.format("%s TEXT: %s", indentStr, node.getText()));
-
-        } else {
-            if (node.getParent() != null) {
-                Log.d("ARVORE", String.format("%s DESCRIPTION: %s", indentStr, node.getParent().getContentDescription()));
-                Log.d("ARVORE", String.format("%s TEXT: %s", indentStr, node.getParent().getText()));
-            }
+        switch (source.getPackageName().toString()){
+            case Constants.FACEBOOK_PACKAGE:
+                //TODO IMPLEMENT
+                break;
+            case Constants.INSTAGRAM_PACKAGE:
+                //TODO IMPLEMENT
+                break;
+            case Constants.TWITTER_PACKAGE:
+                if(source.getClassName().equals("android.widget.Button") && source.getText().equals("TWEET")){
+                    if(sendAltTextToAPI && currentImage != null) {
+                        APIClient.insertImageAndAltText(currentImage, altText);
+                    }
+                    cleanVariables();
+                }
+                break;
         }
-        for (int i = 0; i < node.getChildCount(); i++) {
-            logNodeTree(node.getChild(i), indent + 1);
-        }
-        node.recycle();
     }
 
-    public void logWindows() {
-        Log.e("LOGWINDOWS", "-------------------------START-----------------------------");
-
-        for (AccessibilityWindowInfo awi : service.getWindows()) {
-
-            Log.e("LOGWINDOWS", awi.toString());
-
-            if (awi.getType() == AccessibilityWindowInfo.TYPE_INPUT_METHOD)
-                logNodeTree(awi.getRoot(), 0);
-
-        }
-
-        Log.e("LOGWINDOWS", "-------------------------THE END-----------------------------");
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.P)
-    public void detectPostMediaToSocialNetwork(AccessibilityNodeInfo rootInActiveWindow) {
+    public void detectPostCreation(AccessibilityNodeInfo rootInActiveWindow) {
         if(rootInActiveWindow == null)
             return;
         Counter counter = new Counter(0);
-        if (rootInActiveWindow.getPackageName().toString().equals("com.facebook.katana")) {
-            runNodeTreeFacebook(rootInActiveWindow, counter);
-            Log.e("RESULTADO", ": " + counter.getNumber());
-            if(counter.getNumber() == Constants.FACEBOOK_COUNTER){
-                notificationController.sendNotification("Facebook");
-            }
-        }else if(rootInActiveWindow.getPackageName().toString().equals("com.twitter.android")){
-            Rect imageBound = new Rect();
-            runNodeTreeTwitter(rootInActiveWindow, counter, imageBound);
+        switch (rootInActiveWindow.getPackageName().toString()){
+            case Constants.FACEBOOK_PACKAGE:
+                treeCrawlers.runNodeTreeFacebook(rootInActiveWindow, counter);
+                //TODO IMPLEMENT
+                analyseTreeRun(Constants.FACEBOOK_PACKAGE, counter, null);
+                break;
+            case Constants.INSTAGRAM_PACKAGE:
+                treeCrawlers.runNodeTreeInstagram(rootInActiveWindow, counter);
+                //TODO IMPLEMENT
+                analyseTreeRun(Constants.INSTAGRAM_PACKAGE, counter, null);
+                break;
+            case Constants.TWITTER_PACKAGE:
+                //get the View size to crop the screenshot
+                Rect imageBound = new Rect();
+                treeCrawlers.runNodeTreeTwitter(rootInActiveWindow, counter, imageBound);
+                treeCrawlers.runNodeTreeForTwitterAltText(rootInActiveWindow);
+                analyseTreeRun(Constants.TWITTER_PACKAGE, counter, imageBound);
 
-            Log.e("RESULTADO", ": " + counter.getNumber());
-            if(counter.getNumber() == Constants.TWITTER_COUNTER){
-                notificationController.sendNotification("Twitter");
-                if(imageBound.bottom == 0 && imageBound.top == 0 && imageBound.left == 0 && imageBound.right == 0){
-                    getScreenshot(-1 , -1, -1, -1);
-                }else{
-
-                    getScreenshot(imageBound.left , imageBound.top, //X,Y
-                             (imageBound.right - imageBound.left), (imageBound.bottom - imageBound.top));//width, height
-                }
-            }
-        }else if(rootInActiveWindow.getPackageName().toString().equals("com.instagram.android")){
-            runNodeTreeInstagram(rootInActiveWindow, counter);
-            Log.e("RESULTADO", ": " + counter.getNumber());
-            if(counter.getNumber() == Constants.INSTAGRAM_COUNTER){
-                notificationController.sendNotification("Instagram");
-            }
+                break;
         }
     }
 
-    public void runNodeTreeFacebook(AccessibilityNodeInfo node, Counter counter) {
-        if (node == null)
-            return;
+    private void analyseTreeRun(String appRun, Counter counter, Rect imageBound){
 
-        if (node.getContentDescription() != null) {
-            Log.d("ARVORE", String.format("DESCRIPTION: %s", node.getContentDescription()));
-            if (node.getContentDescription().toString().equals("POST")) {
-                counter.inc();
-            } else if (node.getContentDescription().toString().equals("POST")) {
-                counter.inc();
-            } else if (node.getContentDescription().toString().contains("Choose privacy")) {
-                counter.inc();
-            } else if (node.getContentDescription().toString().equals("Add album")) {
-                counter.inc();
-            } else if (node.getContentDescription().toString().equals("Album")) {
-                counter.inc();
-            } else if (node.getContentDescription().toString().equals("Tap to edit your photo")) {
-                counter.inc();
-            } else if (node.getContentDescription().toString().equals("Cancel Photo")) {
-                counter.inc();
-            } else if (node.getContentDescription().toString().equals("Add to your post")) {
-                counter.inc();
-            }
-        }
-        if (node.getText() != null) {
-            Log.d("ARVORE", String.format("TEXT: %s", node.getText()));
-            if (node.getText().toString().equals("Say something about this photo…")) {
-                counter.inc();
-            }
-        }
+        switch (appRun){
+            case Constants.FACEBOOK_PACKAGE:
+                //TODO
+                break;
 
-        Log.e("CONTADOR", ": " + counter.getNumber());
-        for (int i = 0; i < node.getChildCount(); i++) {
-            runNodeTreeFacebook(node.getChild(i), counter);
-        }
-        node.recycle();
-    }
+            case Constants.INSTAGRAM_PACKAGE:
+                //TODO
+                break;
 
-    public void runNodeTreeTwitter(AccessibilityNodeInfo node, Counter counter, Rect imageBound) {
-        if (node == null)
-            return;
-
-        if (node.getContentDescription() != null) {
-            Log.d("ARVORE", String.format("DESCRIPTION: %s", node.getContentDescription()));
-            if (node.getContentDescription().toString().equals("Navigate up")) {
-                counter.inc();
-            } else if (node.getContentDescription().toString().equals("Attached photo.")) {
-                node.getBoundsInScreen(imageBound);
-                counter.inc();
-            } else if (node.getContentDescription().toString().equals("Add a Tweet")) {
-                counter.inc();
-            } else if (node.getContentDescription().toString().contains("Tweet length")) {
-                counter.inc();
-            } else if (node.getContentDescription().toString().equals("Tap to edit your photo")) {
-                counter.inc();
-            } else if (node.getContentDescription().toString().contains("characters left") || node.getContentDescription().toString().contains("character left")) {
-                counter.inc();
-            }
-        }
-        if (node.getText() != null) {
-            Log.d("ARVORE", String.format("TEXT: %s", node.getText()));
-            if (node.getText().toString().equals("TWEET")) {
-                counter.inc();
-            }
-            if (node.getText().toString().equals("Add a comment…")) {
-                counter.inc();
-            }
-        }
-
-        Log.e("CONTADOR", ": " + counter.getNumber());
-        for (int i = 0; i < node.getChildCount(); i++) {
-            runNodeTreeTwitter(node.getChild(i), counter, imageBound);
-        }
-        node.recycle();
-    }
-
-    public void runNodeTreeInstagram(AccessibilityNodeInfo node, Counter counter) {
-        if (node == null)
-            return;
-
-        if (node.getContentDescription() != null) {
-            Log.d("ARVORE", String.format("DESCRIPTION: %s", node.getContentDescription()));
-            if (node.getContentDescription().toString().equals("Photo Thumbnail") || node.getContentDescription().toString().equals("Album Thumbnail Preview")) {
-                counter.inc();
-            } else if (node.getContentDescription().toString().equals("Back")) {
-                counter.inc();
-            } else if (node.getContentDescription().toString().equals("Share")) {
-                counter.inc();
-            }
-        }
-        if (node.getText() != null) {
-            Log.d("ARVORE", String.format("TEXT: %s", node.getText()));
-            if (node.getText().toString().equals("Tag People")) {
-                counter.inc();
-            } else if (node.getText().toString().equals("Write a caption…")) {
-                counter.inc();
-            }else if (node.getText().toString().equals("Also post to")) {
-                counter.inc();
-            }else if (node.getText().toString().equals("Advanced Settings")) {
-                counter.inc();
-            }else if (node.getText().toString().equals("New Post")) {
-                counter.inc();
-            }
-        }
-
-        Log.e("CONTADOR", ": " + counter.getNumber());
-        for (int i = 0; i < node.getChildCount(); i++) {
-            runNodeTreeInstagram(node.getChild(i), counter);
-        }
-        node.recycle();
-    }
-
-    public void runNodeTreeForScreenshot(AccessibilityNodeInfo node) {
-        if (node == null || node.getPackageName() == null || !node.getPackageName().equals("com.android.systemui"))
-            return;
-
-        if (node.getText() != null) {
-            Log.d("ARVORE", String.format("TEXT: %s", node.getText()));
-            if (node.getText().toString().equals("Start now")) {
-                node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-            }
-        }
-
-        for (int i = 0; i < node.getChildCount(); i++) {
-            runNodeTreeForScreenshot(node.getChild(i));
-        }
-        node.recycle();
-    }
-
-    public void goBack(){
-        Log.e("CONTADOR", "SWITCHERINO");
-//        service.performGlobalAction(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT);
-        service.performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                service.performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        service.getSoftKeyboardController().setShowMode(AccessibilityService.SHOW_MODE_HIDDEN);
+            case Constants.TWITTER_PACKAGE:
+                if(counter.getNumber() == Constants.TWITTER_COUNTER){
+                    if(imageBound.bottom == 0 && imageBound.top == 0 && imageBound.left == 0 && imageBound.right == 0){
+                        takeScreenshot(-1 , -1, -1, -1);
+                    }else{
+                        takeScreenshot(imageBound.left , imageBound.top, //X,Y
+                                (imageBound.right - imageBound.left), (imageBound.bottom - imageBound.top));//width, height
                     }
-                }, 100);
-            }
-        }, 150);
+                }
+                break;
+        }
     }
 
-    private void getScreenshot(int bitMapCutoutX, int bitMapCutoutY, int bitMapCutoutWidth, int bitMapCutoutHeight){
-        if (c > 0)
+    private void takeScreenshot(int bitMapCutoutX, int bitMapCutoutY, int bitMapCutoutWidth, int bitMapCutoutHeight){
+
+        if(!canITakeScreenshot || altText != null)
             return;
 
-        c++;
-        Intent i = new Intent(service.getApplicationContext(), ScreenShotCapture.class);
-        i.putExtra("bitMapCutoutX", bitMapCutoutX);
-        i.putExtra("bitMapCutoutY", bitMapCutoutY);
-        i.putExtra("bitMapCutoutWidth", bitMapCutoutWidth);
-        i.putExtra("bitMapCutoutHeight", bitMapCutoutHeight);
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        service.startActivity(i);
+        startScreenshotCoolDown();
+
+        // hide the soft keyboard if is showing
+        AccessibilityServiceUtils.hideKeyboard(service);
+        new Handler().postDelayed(() -> {
+            //give time to the keyboard disappear
+            //and take the screenshot
+            AccessibilityServiceUtils.takeScreenshot(service);
+
+            // activate back the keyboard
+            AccessibilityServiceUtils.showKeyboard(service);
+        }, 1000);
+        new Handler().postDelayed(() -> {
+
+            //give time to the screenshot to be written to disk
+            //crop the image and send the encoded image to our backend
+            //for searching an alt text
+            currentImage = ImageUtils.getImageToAPI(
+                    bitMapCutoutX,
+                    bitMapCutoutY,
+                    bitMapCutoutWidth,
+                    bitMapCutoutHeight);
+
+            APIClient.searchImageFile(
+                    currentImage,
+                    messageHandler);
+
+        }, 5000);
     }
 
-    public void callAPI(){
-        APIClient.searchImageFile(new File("/storage/emulated/0/screenshots/myscreen.png"));
+    private void cleanVariables() {
+        currentImage = null;
+        altText = null;
+        canITakeScreenshot = true;
     }
 
-    public void callAPI(byte[] bytes){
-        APIClient.searchImageFile(bytes);
+    private void startScreenshotCoolDown(){
+
+        canITakeScreenshot = false;
+
+        new Handler().postDelayed(() -> canITakeScreenshot = true, Constants.SCREENSHOT_COOL_DOWN);
     }
+
 }

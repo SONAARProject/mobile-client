@@ -10,13 +10,12 @@ import org.json.JSONObject;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import pt.fcul.lasige.sonaar.pojo.Message;
+import pt.fcul.lasige.sonaar.api.pojo.Message;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,98 +47,56 @@ public class APIClient {
         return retrofit;
     }
 
-    public static void searchImageUrl(String url){
+    public static void searchImageUrl(String url, APIMessageHandler messageHandler){
 
         Call<Message> call1 = getClient().create(APIInterface.class).searchImageUrl(url);
         call1.enqueue(new Callback<Message>() {
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {
-                Log.d("APIRESPONSE", call.toString());
-                Log.d("APIRESPONSE", response.toString());
+
                 Message message = response.body();
-                if(message != null){
-                    Log.d("APIRESPONSE", "message: " + message.message);
-                    Log.d("APIRESPONSE", "status:  " + message.status);
-//                    Log.d("APIRESPONSE", message.alts);
-                    if (message.status == 1){
-                        Log.d("APIRESPONSE", message.alts);
-                        try {
-                            JSONArray array = new JSONArray(message.alts);
-                            for (int i=0;i<array.length();i++){
-                                JSONObject jsonObject = array.getJSONObject(i);
-                                Log.d("APIRESPONSE", jsonObject.getString("ClarifaiConcepts"));
-                                Log.d("APIRESPONSE", jsonObject.getString("AltText"));
-                                Log.d("APIRESPONSE", jsonObject.getString("Keywords"));
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }else {
-                    Log.d("APIRESPONSE", "NULL RESPONSE");
-                }
+                messageHandler.onSearchResponseMessage(message);
 
             }
 
             @Override
             public void onFailure(Call<Message> call, Throwable t) {
-                Log.d("APIRESPONSE", "BOOM");
                 t.printStackTrace();
             }
 
         });
     }
 
-    public static void searchImageFile(byte[] bytes){
+    public static void searchImageFile(byte[] bytes, APIMessageHandler messageHandler){
 
-        Call<Message> call = getClient().create(APIInterface.class).searchImageBinary(Base64.encodeToString(bytes, Base64.DEFAULT));
+        Call<Message> call = getClient().create(APIInterface.class).searchImageBinary(Base64.encodeToString(bytes, Base64.NO_WRAP));
         call.enqueue(new Callback<Message>() {
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {
-                Log.d("APIRESPONSE", call.toString());
-                Log.d("APIRESPONSE", response.toString());
-                Message message = response.body();
-                if(message != null){
-                    Log.d("APIRESPONSE", "message: " + message.message);
-                    Log.d("APIRESPONSE", "status:  " + message.status);
-//                    Log.d("APIRESPONSE", message.alts);
-                }else {
-                    Log.d("APIRESPONSE", "NULL RESPONSE");
-                }
 
+                Message message = response.body();
+                messageHandler.onSearchResponseMessage(message);
             }
 
             @Override
             public void onFailure(Call<Message> call, Throwable t) {
-                Log.d("APIRESPONSE", "BOOM");
                 t.printStackTrace();
             }
 
         });
     }
 
-    public static void searchImageFile(File f){
+    public static void insertImageAndAltText(byte[] bytes, String altText){
 
-        Call<Message> call = getClient().create(APIInterface.class).searchImageBinary(Base64.encodeToString(getBytes(f), Base64.DEFAULT));
+        Call<Message> call = getClient().create(APIInterface.class).insertBase64(Base64.encodeToString(bytes, Base64.NO_WRAP), altText);
         call.enqueue(new Callback<Message>() {
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {
-                Log.d("APIRESPONSE", call.toString());
-                Log.d("APIRESPONSE", response.toString());
                 Message message = response.body();
-                if(message != null){
-                    Log.d("APIRESPONSE", "message: " + message.message);
-                    Log.d("APIRESPONSE", "status:  " + message.status);
-//                    Log.d("APIRESPONSE", message.alts);
-                }else {
-                    Log.d("APIRESPONSE", "NULL RESPONSE");
-                }
-
             }
 
             @Override
             public void onFailure(Call<Message> call, Throwable t) {
-                Log.d("APIRESPONSE", "BOOM");
                 t.printStackTrace();
             }
 

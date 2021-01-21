@@ -8,11 +8,10 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.service.notification.StatusBarNotification;
-import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
-import pt.fcul.lasige.sonaar.util.Constants;
+import pt.fcul.lasige.sonaar.data.Constants;
 
 public class NotificationController {
 
@@ -26,7 +25,7 @@ public class NotificationController {
         createChannel();
     }
 
-    public void sendNotification(String socialNetworkName) {
+    public void sendNotification(String socialNetworkName, String altText) {
 
         // Show notification
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -36,37 +35,34 @@ public class NotificationController {
                     if(!canISendNotifications)
                         return;
 
-                    manager.notify(Constants.FACEBOOK_NOTIFICATION_ID, buildNotification(socialNetworkName));
+                    manager.notify(Constants.FACEBOOK_NOTIFICATION_ID, buildNotification(socialNetworkName, ""));
                     coolDownNotifications();
                 }
             case "Twitter":
                 if(!isNotificationLive(Constants.TWITTER_NOTIFICATION_ID)) {
-                    if(!canISendNotifications)
-                        return;
+                    manager.notify(Constants.TWITTER_NOTIFICATION_ID, buildNotification(socialNetworkName, altText));
 
-                    manager.notify(Constants.TWITTER_NOTIFICATION_ID, buildNotification(socialNetworkName));
-                    coolDownNotifications();
                 }
             case "Instagram":
                 if(!isNotificationLive(Constants.INSTAGRAM_NOTIFICATION_ID)) {
                     if(!canISendNotifications)
                         return;
 
-                    manager.notify(Constants.INSTAGRAM_NOTIFICATION_ID, buildNotification(socialNetworkName));
+                    manager.notify(Constants.INSTAGRAM_NOTIFICATION_ID, buildNotification(socialNetworkName, ""));
                     coolDownNotifications();
                 }
         }
     }
 
-    private Notification buildNotification(String socialNetworkName){
+    private Notification buildNotification(String socialNetworkName, String altText){
         return new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("Sonaar")
                 .setStyle(new
-                        NotificationCompat.BigTextStyle().bigText("We detected that you are posting a image to " + socialNetworkName +
-                        " please consider add an alternative text to your image post. Thank you :)"))
-                .setContentText("We detected that you are posting a image to " + socialNetworkName +
-                        " please consider add an alternative text to your image post. Thank you :)")
+                        NotificationCompat.BigTextStyle().bigText("Sonaar detected that you are posting a image to " + socialNetworkName +
+                        " please consider add an alternative text to your image post. A possible altText is: " + altText))
+                .setContentText("Sonaar detected that you are posting a image to " + socialNetworkName +
+                        " please consider add an alternative text to your image post. A possible altText is: " + altText)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .build();
     }
@@ -102,19 +98,17 @@ public class NotificationController {
     }
 
     public void createChannel(){
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            NotificationChannel mChannel = null;
-            mChannel = new NotificationChannel(CHANNEL_ID, "Tasks", NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationChannel mChannel = null;
+        mChannel = new NotificationChannel(CHANNEL_ID, "Tasks", NotificationManager.IMPORTANCE_DEFAULT);
 
-            // Configure the notification channel.
-            mChannel.setDescription("This channel shows notifications for remind you to add a alt text to your media");
-            mChannel.enableLights(true);
-            mChannel.setLightColor(Color.RED);
-            mChannel.enableVibration(true);
+        // Configure the notification channel.
+        mChannel.setDescription("This channel shows notifications for remind you to add a alt text to your media");
+        mChannel.enableLights(true);
+        mChannel.setLightColor(Color.RED);
+        mChannel.enableVibration(true);
 
-            mNotificationManager.createNotificationChannel(mChannel);
-        }
+        mNotificationManager.createNotificationChannel(mChannel);
     }
 }

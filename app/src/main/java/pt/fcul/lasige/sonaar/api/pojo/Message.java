@@ -1,4 +1,4 @@
-package pt.fcul.lasige.sonaar.pojo;
+package pt.fcul.lasige.sonaar.api.pojo;
 
 import com.google.gson.annotations.SerializedName;
 
