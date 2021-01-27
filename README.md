@@ -7,6 +7,7 @@
 
 ## How to install (APK)
 
+- Download the [apk](https://github.com/SONAARProject/mobile-client/raw/master/apk/sonar.apk)
 - Enable "[install from unkown sources](https://developer.android.com/distribute/marketing-tools/alternative-distribution)" on the app you start the instalation from (ex: browser, file manager, etc...)
 
 ## How to compile and install (Android studio)
