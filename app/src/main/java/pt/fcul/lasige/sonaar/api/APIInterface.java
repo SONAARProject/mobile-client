@@ -10,14 +10,14 @@ import retrofit2.http.Path;
 
 public interface APIInterface {
 
-    @GET("/sonaar/clarifai/search/{url}")
+    @GET("search/{url}")
     Call<Message> searchImageUrl(@Path("url") String url);
 
     @FormUrlEncoded
-    @POST("/sonaar/clarifai/search/")
+    @POST("search/")
     Call<Message> searchImageBinary(@Field("imageBase64") String imageBase64);
 
     @FormUrlEncoded
-    @POST("/sonaar/clarifai/insertBase64/")
+    @POST("insertBase64/")
     Call<Message> insertBase64(@Field("imageBase64") String imageBase64, @Field("altText") String altText);
 }

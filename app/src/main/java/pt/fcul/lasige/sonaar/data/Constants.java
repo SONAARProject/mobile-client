@@ -15,5 +15,5 @@ public class Constants {
     public static final String INSTAGRAM_PACKAGE = "com.instagram.android";
     public static final String TWITTER_PACKAGE = "com.twitter.android";
     public static final String EXTERNAL_STORAGE_PATH = Environment.getExternalStorageDirectory().getPath();
-
+    public static final String API_BASE_URL = "https://accessible-serv.lasige.di.fc.ul.pt/sonaar/clarifai/"; // change this with your url
 }

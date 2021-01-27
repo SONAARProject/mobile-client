@@ -1,11 +1,6 @@
 package pt.fcul.lasige.sonaar.api;
 
 import android.util.Base64;
-import android.util.Log;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -16,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import pt.fcul.lasige.sonaar.api.pojo.Message;
+import pt.fcul.lasige.sonaar.data.Constants;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,7 +35,7 @@ public class APIClient {
                 .build();
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("https://accessible-serv.lasige.di.fc.ul.pt")
+                .baseUrl(Constants.API_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();
