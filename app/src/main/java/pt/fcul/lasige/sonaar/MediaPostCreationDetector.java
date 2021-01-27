@@ -1,10 +1,8 @@
 package pt.fcul.lasige.sonaar;
 
 import android.accessibilityservice.AccessibilityService;
-import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Handler;
-import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import pt.fcul.lasige.sonaar.api.APIClient;
@@ -19,12 +17,12 @@ import pt.fcul.lasige.sonaar.util.TreeCrawlers;
 public class MediaPostCreationDetector {
 
     private boolean canITakeScreenshot = true;
-    private boolean sendAltTextToAPI = false;
     private AccessibilityService service;
     private NotificationController notificationController;
     private APIMessageHandler messageHandler;
     private byte[] currentImage;
-    private String altText;
+    private String userAltText;
+    private String sonaarAltText;
     private TreeCrawlers treeCrawlers;
 
     private static MediaPostCreationDetector mediaPostCreationDetector;
@@ -45,12 +43,12 @@ public class MediaPostCreationDetector {
         messageHandler = new APIMessageHandler(notificationController);
     }
 
-    public void setAltText(String altText) {
-        this.altText = altText;
+    public void setUserAltText(String userAltText) {
+        this.userAltText = userAltText;
     }
 
-    public void setSendAltTextToAPI(boolean sendAltTextToAPI) {
-        this.sendAltTextToAPI = sendAltTextToAPI;
+    public void setSonaarAltText(String sonaarAltText) {
+        this.sonaarAltText = sonaarAltText;
     }
 
 
@@ -70,8 +68,8 @@ public class MediaPostCreationDetector {
                 break;
             case Constants.TWITTER_PACKAGE:
                 if(source.getClassName().equals("android.widget.Button") && source.getText().equals("TWEET")){
-                    if(sendAltTextToAPI && currentImage != null) {
-                        APIClient.insertImageAndAltText(currentImage, altText);
+                    if(userAltText != null && !userAltText.equals(sonaarAltText) && currentImage != null) {
+                        APIClient.insertImageAndAltText(currentImage, userAltText);
                     }
                     cleanVariables();
                 }
@@ -131,7 +129,7 @@ public class MediaPostCreationDetector {
 
     private void takeScreenshot(int bitMapCutoutX, int bitMapCutoutY, int bitMapCutoutWidth, int bitMapCutoutHeight){
 
-        if(!canITakeScreenshot || altText != null)
+        if(!canITakeScreenshot || userAltText != null)
             return;
 
         startScreenshotCoolDown();
@@ -166,7 +164,7 @@ public class MediaPostCreationDetector {
 
     private void cleanVariables() {
         currentImage = null;
-        altText = null;
+        userAltText = null;
         canITakeScreenshot = true;
     }
 

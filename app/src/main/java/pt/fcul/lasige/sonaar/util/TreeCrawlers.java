@@ -116,7 +116,7 @@ public class TreeCrawlers {
 
         if (node.getViewIdResourceName() != null) {
             if (node.getViewIdResourceName().equals("com.twitter.android:id/alt_text_edit")) {
-                MediaPostCreationDetector.getInstance().setAltText(node.getText().toString().substring(0, node.getText().toString().indexOf("\n")));
+                MediaPostCreationDetector.getInstance().setUserAltText(node.getText().toString().substring(0, node.getText().toString().indexOf("\n")));
             }
         }
 

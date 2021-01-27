@@ -31,13 +31,12 @@ public class APIMessageHandler{
                     JSONArray array = new JSONArray(message.alts);
                     for (int i=0;i<array.length();i++){
                         JSONObject jsonObject = array.getJSONObject(i);
+                        MediaPostCreationDetector.getInstance().setSonaarAltText(jsonObject.getString("AltText"));
                         notificationController.sendNotification("Twitter", jsonObject.getString("AltText"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }else if(message.status == 3){
-                MediaPostCreationDetector.getInstance().setSendAltTextToAPI(true);
             }
         }else {
             if(Constants.PRINT_API_RESPONSE)
