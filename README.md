@@ -12,9 +12,11 @@
 
 ## How to compile and install (Android studio)
 
-- Clone the repo to android studio and launch
+- Clone the repo to android studio and run
 
 ## How to use
 
 - Open the app and enable the accessibility service
-- Go to twitter and try to post a photo
+- Go to twitter android app and try to post a photo
+  - If sonaar finds an alt text it will send a notification
+  - If sonaar doesn't find an alt text it will record the alt text you write to its database
