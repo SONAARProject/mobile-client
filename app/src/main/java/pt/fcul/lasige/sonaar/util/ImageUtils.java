@@ -28,6 +28,9 @@ public class ImageUtils {
 
     public static File getLastScreenshot(){
         File directory = new File(Constants.EXTERNAL_STORAGE_PATH + "/Pictures/Screenshots");
+        if(!directory.exists()) {
+            directory = new File(Constants.EXTERNAL_STORAGE_PATH + "/DCIM/Screenshots");
+        }
         File[] files = directory.listFiles();
         long lastModifiedTime = Long.MIN_VALUE;
         File screenshot = null;
