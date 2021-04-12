@@ -1,8 +1,5 @@
 package pt.fcul.lasige.sonaar.overlay;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +14,7 @@ import pt.fcul.lasige.sonaar.R;
 public class AltTextListAdapter extends RecyclerView.Adapter<AltTextListAdapter.ViewHolder> {
 
     private ArrayList<String> localDataSet;
-    private Context ctx;
+    private View.OnClickListener listener;
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
@@ -43,9 +40,9 @@ public class AltTextListAdapter extends RecyclerView.Adapter<AltTextListAdapter.
      * @param dataSet ArrayList<String> containing the data to populate views to be used
      * by RecyclerView.
      */
-    public AltTextListAdapter(Context ctx, ArrayList<String> dataSet) {
+    public AltTextListAdapter(View.OnClickListener listener, ArrayList<String> dataSet) {
         this.localDataSet = dataSet;
-        this.ctx = ctx;
+        this.listener = listener;
     }
 
     // Create new views (invoked by the layout manager)
@@ -65,14 +62,7 @@ public class AltTextListAdapter extends RecyclerView.Adapter<AltTextListAdapter.
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         viewHolder.getTextView().setText(localDataSet.get(position));
-        viewHolder.getTextView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("altText", localDataSet.get(position));
-                clipboard.setPrimaryClip(clip);
-            }
-        });
+        viewHolder.getTextView().setOnClickListener(listener);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

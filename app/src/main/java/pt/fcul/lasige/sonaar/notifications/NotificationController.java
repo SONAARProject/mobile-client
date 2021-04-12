@@ -22,8 +22,6 @@ public class NotificationController {
 
     Context context;
     private static final String CHANNEL_ID = "1904";
-    private static final int NOTIFICATION_COOL_DOWN = 2000; //ms
-    private boolean canISendNotifications = true;
 
     public NotificationController(Context context) {
         this.context = context;
@@ -82,7 +80,7 @@ public class NotificationController {
 
             if(socialNetworkName == null){
                 return new NotificationCompat.Builder(context, CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                        .setSmallIcon(R.mipmap.ic_notification_foreground)
                         .setContentTitle("Sonaar")
                         .setStyle(new
                                 NotificationCompat.BigTextStyle().bigText("Sonaar found a possible altText to your image: " + text))
@@ -90,10 +88,11 @@ public class NotificationController {
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .addAction(action1)
                         .addAction(action2)
+                        .setAutoCancel(true)
                         .build();
             }else {
                 return new NotificationCompat.Builder(context, CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                        .setSmallIcon(R.mipmap.ic_notification_foreground)
                         .setContentTitle("Sonaar")
                         .setStyle(new
                                 NotificationCompat.BigTextStyle().bigText("Sonaar detected that you are posting a image to " + socialNetworkName +
@@ -103,22 +102,23 @@ public class NotificationController {
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .addAction(action1)
                         .addAction(action2)
+                        .setAutoCancel(true)
                         .build();
             }
         }else {
             if(socialNetworkName == null){
                 return new NotificationCompat.Builder(context, CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                        .setSmallIcon(R.mipmap.ic_notification_foreground)
                         .setContentTitle("Sonaar")
                         .setStyle(new
                                 NotificationCompat.BigTextStyle().bigText("Sonaar could not find an altText, but found some possible concepts about the image: " + text))
                         .setContentText("Sonaar could not find an altText, but found some possible concepts about the image: " + text)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        //                .addAction(R.mipmap.ic_launcher, getString(R.string.snooze), snoozePendingIntent)
+                        .setAutoCancel(true)
                         .build();
             }else {
                 return new NotificationCompat.Builder(context, CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                        .setSmallIcon(R.mipmap.ic_notification_foreground)
                         .setContentTitle("Sonaar")
                         .setStyle(new
                                 NotificationCompat.BigTextStyle().bigText("Sonaar detected that you are posting a image to " + socialNetworkName +
@@ -126,7 +126,7 @@ public class NotificationController {
                         .setContentText("Sonaar detected that you are posting a image to " + socialNetworkName +
                                 ". We could not find an altText, but found some possible concepts about the image: " + text)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        //                .addAction(R.mipmap.ic_launcher, getString(R.string.snooze), snoozePendingIntent)
+                        .setAutoCancel(true)
                         .build();
             }
         }

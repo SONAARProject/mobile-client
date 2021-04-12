@@ -1,6 +1,7 @@
 package pt.fcul.lasige.sonaar.notifications;
 
 import android.app.IntentService;
+import android.app.NotificationManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -37,6 +38,9 @@ public class NotificationActionsService extends IntentService {
                 } else {
                     throw new IllegalArgumentException("Unsupported action: " + action);
                 }
+
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.cancelAll();
                 Looper.loop();
             }
         }).start();
