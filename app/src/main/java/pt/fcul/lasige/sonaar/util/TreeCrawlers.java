@@ -9,20 +9,13 @@ import pt.fcul.lasige.sonaar.Controller;
 import pt.fcul.lasige.sonaar.data.Counter;
 
 public class TreeCrawlers {
-    public void runNodeTreeFacebook(AccessibilityNodeInfo node, Counter counter) {
+    public void runNodeTreeFacebook(AccessibilityNodeInfo node, Counter counter, Rect imageBound) {
         if (node == null)
             return;
 
         if (node.getContentDescription() != null) {
-            if (node.getContentDescription().toString().equals("POST")) {
-                counter.incPost();
-            } else if (node.getContentDescription().toString().equals("POST")) {
-                counter.incPost();
-            } else if (node.getContentDescription().toString().contains("Choose privacy")) {
-                counter.incPost();
-            } else if (node.getContentDescription().toString().equals("Add album")) {
-                counter.incPost();
-            } else if (node.getContentDescription().toString().equals("Album")) {
+            if (node.getContentDescription().toString().equals("Photo")) {
+                node.getBoundsInScreen(imageBound);
                 counter.incPost();
             } else if (node.getContentDescription().toString().equals("Tap to edit your photo")) {
                 counter.incPost();
@@ -30,6 +23,12 @@ public class TreeCrawlers {
                 counter.incPost();
             } else if (node.getContentDescription().toString().equals("Add to your post")) {
                 counter.incPost();
+            } else if (node.getContentDescription().toString().equals("Live")) {
+                counter.incFeed();
+            } else if (node.getContentDescription().toString().equals("Photo")) {
+                counter.incFeed();
+            } else if (node.getContentDescription().toString().equals("Room")) {
+                counter.incFeed();
             }
         }
         if (node.getText() != null) {
@@ -39,7 +38,7 @@ public class TreeCrawlers {
         }
 
         for (int i = 0; i < node.getChildCount(); i++) {
-            runNodeTreeFacebook(node.getChild(i), counter);
+            runNodeTreeFacebook(node.getChild(i), counter, imageBound);
         }
 //        node.recycle();
     }
@@ -59,10 +58,8 @@ public class TreeCrawlers {
             }else if (node.getViewIdResourceName().equals("com.twitter.android:id/gallery")) {
                 counter.incPost();
             }else if (node.getViewIdResourceName().equals("com.twitter.android:id/drawer_layout")) {
-                Log.d("TAG", "drawer_layout");
                 counter.incFeed();
             }else if (node.getViewIdResourceName().equals("com.twitter.android:id/composer_write")) {
-                Log.d("TAG", "composer_write");
                 counter.incFeed();
             }
         }

@@ -3,6 +3,7 @@ package pt.fcul.lasige.sonaar;
 import android.accessibilityservice.AccessibilityService;
 import android.graphics.Rect;
 import android.os.Handler;
+import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import pt.fcul.lasige.sonaar.api.APIClient;
@@ -100,11 +101,12 @@ public class Controller {
         if(rootInActiveWindow == null)
             return;
         Counter counter = new Counter(0, 0);
+        Rect imageBound = new Rect();
         switch (rootInActiveWindow.getPackageName().toString()){
             case Constants.FACEBOOK_PACKAGE:
                 //TODO IMPLEMENT
-                treeCrawlers.runNodeTreeFacebook(rootInActiveWindow, counter);
-                analyseTreeRun(Constants.FACEBOOK_PACKAGE, counter, null);
+                treeCrawlers.runNodeTreeFacebook(rootInActiveWindow, counter, imageBound);
+                analyseTreeRun(Constants.FACEBOOK_PACKAGE, counter, imageBound);
                 break;
             case Constants.INSTAGRAM_PACKAGE:
                 //TODO IMPLEMENT
@@ -113,7 +115,6 @@ public class Controller {
                 break;
             case Constants.TWITTER_PACKAGE:
                 //get the View size to crop the screenshot
-                Rect imageBound = new Rect();
                 treeCrawlers.runNodeTreeTwitter(rootInActiveWindow, counter, imageBound);
                 treeCrawlers.runNodeTreeForTwitterAltText(rootInActiveWindow);
                 analyseTreeRun(Constants.TWITTER_PACKAGE, counter, imageBound);
@@ -126,7 +127,21 @@ public class Controller {
 
         switch (appRun){
             case Constants.FACEBOOK_PACKAGE:
-                //TODO
+
+                Log.d("FEED", " " + counter.getFeed());
+                if(counter.getFeed() == Constants.FACEBOOK_FEED_COUNTER){
+                    cleanVariables();
+                }
+
+                if(counter.getPost() == Constants.FACEBOOK_POST_COUNTER){
+                    if(imageBound.bottom == 0 && imageBound.top == 0 && imageBound.left == 0 && imageBound.right == 0){
+                        takeScreenshot(-1 , -1, -1, -1, APIMessageHandler.SOCIAL_NETWORK.FACEBOOK);
+                    }else{
+                        takeScreenshot(imageBound.left , imageBound.top, //X,Y
+                                (imageBound.right - imageBound.left), (imageBound.bottom - imageBound.top), APIMessageHandler.SOCIAL_NETWORK.FACEBOOK);//width, height
+                    }
+                }
+
                 break;
 
             case Constants.INSTAGRAM_PACKAGE:

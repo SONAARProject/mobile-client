@@ -4,7 +4,8 @@ import android.os.Environment;
 
 public class Constants {
     public static final boolean PRINT_API_RESPONSE = true;
-    public static final int FACEBOOK_COUNTER = 9;
+    public static final int FACEBOOK_POST_COUNTER = 5;
+    public static final int FACEBOOK_FEED_COUNTER = 4;
     public static final int TWITTER_POST_COUNTER = 4;
     public static final int TWITTER_FEED_COUNTER = 2;
     public static final int INSTAGRAM_COUNTER = 8;
