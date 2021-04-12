@@ -2,14 +2,13 @@ package pt.fcul.lasige.sonaar.accessibleservice;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
-import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
-import pt.fcul.lasige.sonaar.MediaPostCreationDetector;
+import pt.fcul.lasige.sonaar.Controller;
 
 public class AccessibilityServiceClass extends AccessibilityService {
 
-    private MediaPostCreationDetector lib;
+    private Controller lib;
 
     @Override
     protected void onServiceConnected() {
@@ -22,7 +21,7 @@ public class AccessibilityServiceClass extends AccessibilityService {
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
         setServiceInfo(info);
 
-        lib = MediaPostCreationDetector.getInstance();
+        lib = Controller.getInstance();
         lib.setService(this);
     }
 

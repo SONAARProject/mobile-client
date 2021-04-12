@@ -1,21 +1,28 @@
 package pt.fcul.lasige.sonaar.data;
 
 public class Counter {
-    int number;
+    int post;
+    int feed;
 
-    public Counter(int number) {
-        this.number = number;
+    public Counter(int post, int feed) {
+        this.post = post;
+        this.feed = feed;
     }
 
-    public void inc(){
-        number++;
+    public void incPost(){
+        post++;
     }
 
-    public int getNumber() {
-        return number;
+    public void incFeed(){
+        feed++;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public int getPost() {
+        return post;
     }
+
+    public int getFeed() {
+        return feed;
+    }
+
 }

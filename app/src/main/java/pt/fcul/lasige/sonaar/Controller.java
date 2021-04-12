@@ -7,6 +7,8 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import pt.fcul.lasige.sonaar.api.APIClient;
 import pt.fcul.lasige.sonaar.api.APIMessageHandler;
+import pt.fcul.lasige.sonaar.notifications.NotificationController;
+import pt.fcul.lasige.sonaar.overlay.Overlay;
 import pt.fcul.lasige.sonaar.util.AccessibilityServiceUtils;
 import pt.fcul.lasige.sonaar.data.Constants;
 import pt.fcul.lasige.sonaar.data.Counter;
@@ -14,9 +16,10 @@ import pt.fcul.lasige.sonaar.util.ImageUtils;
 import pt.fcul.lasige.sonaar.util.TreeCrawlers;
 
 
-public class MediaPostCreationDetector {
+public class Controller {
 
     private boolean canITakeScreenshot = true;
+    private boolean canISetAltText = true;
     private AccessibilityService service;
     private NotificationController notificationController;
     private APIMessageHandler messageHandler;
@@ -25,32 +28,48 @@ public class MediaPostCreationDetector {
     private String sonaarAltText;
     private TreeCrawlers treeCrawlers;
 
-    private static MediaPostCreationDetector mediaPostCreationDetector;
+    private static Controller controller;
 
-    public static MediaPostCreationDetector getInstance(){
-        if (mediaPostCreationDetector == null)
-            mediaPostCreationDetector = new MediaPostCreationDetector();
+    public static Controller getInstance(){
+        if (controller == null)
+            controller = new Controller();
 
-        return mediaPostCreationDetector;
+        return controller;
     }
 
-    private MediaPostCreationDetector() { }
+    private Controller() { }
 
     public void setService(AccessibilityService service) {
         this.service = service;
         notificationController = new NotificationController(service.getApplicationContext());
         treeCrawlers = new TreeCrawlers();
         messageHandler = new APIMessageHandler(notificationController);
+        Overlay.getInstance().setContext(service);
     }
 
     public void setUserAltText(String userAltText) {
         this.userAltText = userAltText;
     }
 
+    public void setCanISetAltText(boolean canISetAltText) {
+        this.canISetAltText = canISetAltText;
+    }
+
+    public boolean canISetAltText() {
+        return canISetAltText;
+    }
+
     public void setSonaarAltText(String sonaarAltText) {
         this.sonaarAltText = sonaarAltText;
     }
 
+    public String getUserAltText() {
+        return userAltText;
+    }
+
+    public String getSonaarAltText() {
+        return sonaarAltText;
+    }
 
     public void detectPostSubmission(AccessibilityNodeInfo source) {
         if(source == null ||
@@ -80,7 +99,7 @@ public class MediaPostCreationDetector {
     public void detectPostCreation(AccessibilityNodeInfo rootInActiveWindow) {
         if(rootInActiveWindow == null)
             return;
-        Counter counter = new Counter(0);
+        Counter counter = new Counter(0, 0);
         switch (rootInActiveWindow.getPackageName().toString()){
             case Constants.FACEBOOK_PACKAGE:
                 //TODO IMPLEMENT
@@ -115,21 +134,26 @@ public class MediaPostCreationDetector {
                 break;
 
             case Constants.TWITTER_PACKAGE:
-                if(counter.getNumber() == Constants.TWITTER_COUNTER){
+
+                if(counter.getFeed() == Constants.TWITTER_FEED_COUNTER){
+                    cleanVariables();
+                }
+
+                if(counter.getPost() == Constants.TWITTER_POST_COUNTER){
                     if(imageBound.bottom == 0 && imageBound.top == 0 && imageBound.left == 0 && imageBound.right == 0){
-                        takeScreenshot(-1 , -1, -1, -1);
+                        takeScreenshot(-1 , -1, -1, -1, APIMessageHandler.SOCIAL_NETWORK.TWITTER);
                     }else{
                         takeScreenshot(imageBound.left , imageBound.top, //X,Y
-                                (imageBound.right - imageBound.left), (imageBound.bottom - imageBound.top));//width, height
+                                (imageBound.right - imageBound.left), (imageBound.bottom - imageBound.top), APIMessageHandler.SOCIAL_NETWORK.TWITTER);//width, height
                     }
                 }
                 break;
         }
     }
 
-    private void takeScreenshot(int bitMapCutoutX, int bitMapCutoutY, int bitMapCutoutWidth, int bitMapCutoutHeight){
+    private void takeScreenshot(int bitMapCutoutX, int bitMapCutoutY, int bitMapCutoutWidth, int bitMapCutoutHeight, APIMessageHandler.SOCIAL_NETWORK socialNetwork){
 
-        if(!canITakeScreenshot || userAltText != null)
+        if(!canITakeScreenshot)
             return;
 
         startScreenshotCoolDown();
@@ -150,6 +174,7 @@ public class MediaPostCreationDetector {
             //crop the image and send the encoded image to our backend
             //for searching an alt text
             currentImage = ImageUtils.getImageToAPI(
+                    service,
                     bitMapCutoutX,
                     bitMapCutoutY,
                     bitMapCutoutWidth,
@@ -157,7 +182,8 @@ public class MediaPostCreationDetector {
 
             APIClient.searchImageFile(
                     currentImage,
-                    messageHandler);
+                    messageHandler,
+                    socialNetwork);
 
         }, 5000);
     }
@@ -166,13 +192,11 @@ public class MediaPostCreationDetector {
         currentImage = null;
         userAltText = null;
         canITakeScreenshot = true;
+        canISetAltText = true;
     }
 
     private void startScreenshotCoolDown(){
-
         canITakeScreenshot = false;
-
-        new Handler().postDelayed(() -> canITakeScreenshot = true, Constants.SCREENSHOT_COOL_DOWN);
     }
 
 }

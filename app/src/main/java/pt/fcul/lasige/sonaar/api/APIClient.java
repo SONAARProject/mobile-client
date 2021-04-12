@@ -1,6 +1,7 @@
 package pt.fcul.lasige.sonaar.api;
 
 import android.util.Base64;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -43,7 +44,7 @@ public class APIClient {
         return retrofit;
     }
 
-    public static void searchImageUrl(String url, APIMessageHandler messageHandler){
+    public static void searchImageUrl(String url, APIMessageHandler messageHandler, APIMessageHandler.SOCIAL_NETWORK socialNetwork){
 
         Call<Message> call1 = getClient().create(APIInterface.class).searchImageUrl(url);
         call1.enqueue(new Callback<Message>() {
@@ -51,7 +52,7 @@ public class APIClient {
             public void onResponse(Call<Message> call, Response<Message> response) {
 
                 Message message = response.body();
-                messageHandler.onSearchResponseMessage(message);
+                messageHandler.onSearchResponseMessage(message, socialNetwork);
 
             }
 
@@ -63,7 +64,7 @@ public class APIClient {
         });
     }
 
-    public static void searchImageFile(byte[] bytes, APIMessageHandler messageHandler){
+    public static void searchImageFile(byte[] bytes, APIMessageHandler messageHandler, APIMessageHandler.SOCIAL_NETWORK socialNetwork){
 
         Call<Message> call = getClient().create(APIInterface.class).searchImageBinary(Base64.encodeToString(bytes, Base64.NO_WRAP));
         call.enqueue(new Callback<Message>() {
@@ -71,7 +72,7 @@ public class APIClient {
             public void onResponse(Call<Message> call, Response<Message> response) {
 
                 Message message = response.body();
-                messageHandler.onSearchResponseMessage(message);
+                messageHandler.onSearchResponseMessage(message, socialNetwork);
             }
 
             @Override

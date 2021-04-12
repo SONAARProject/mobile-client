@@ -9,4 +9,6 @@ public class Message {
     public String message;
     @SerializedName("alts")
     public String alts;
+    @SerializedName("concepts")
+    public String concepts;
 }
