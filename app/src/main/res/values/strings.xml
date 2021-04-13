@@ -31,4 +31,10 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="settings">Settings</string>
+    <string name="notification_text">Sonaar detected that you are posting a image to %1$s. A possible altText to your image is: %2$s. Please consider add it to your image post. %3$s</string>
+    <string name="notification_text_twitter">To do so click on the +Alt button on the bottom right corner of the image.</string>
+    <string name="notification_text_facebook">To do so publish the image, then open it and click on the more button (3 dot button) and select "Edit alt text".</string>
+    <string name="notification_text_none">Sonaar found a possible altText to your image: %1$s</string>
+    <string name="notification_text_alt_not_found_none">Sonaar could not find an altText, but found some possible concepts about the image: %1$s</string>
+    <string name="notification_text_alt_not_found">Sonaar detected that you are posting a image to %1$s. We could not find an altText, but found some possible concepts about the image: %2$s.</string>
 </resources>

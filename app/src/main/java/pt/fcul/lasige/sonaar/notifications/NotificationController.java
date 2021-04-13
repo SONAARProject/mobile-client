@@ -28,41 +28,42 @@ public class NotificationController {
         createChannel();
     }
 
-    public void sendNotification(APIMessageHandler.SOCIAL_NETWORK socialNetwork, String text, boolean altText, ArrayList<String> alts) {
+    public void sendNotification(APIMessageHandler.SOCIAL_NETWORK socialNetwork, String altText, boolean concepts, ArrayList<String> alts) {
 
         // Show notification
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        switch (socialNetwork){
-            case FACEBOOK:
-                if(!isNotificationLive(Constants.FACEBOOK_NOTIFICATION_ID)) {
-                    if (!text.isEmpty())
-                        manager.notify(Constants.FACEBOOK_NOTIFICATION_ID, buildNotification("Facebook", text, altText, alts));
-                }
-                break;
-            case INSTAGRAM:
-                //TODO IMPLEMENT
-                break;
-            case TWITTER:
-                if(!isNotificationLive(Constants.TWITTER_NOTIFICATION_ID)) {
-                    if (!text.isEmpty())
-                        manager.notify(Constants.TWITTER_NOTIFICATION_ID, buildNotification("Twitter", text, altText, alts));
-                }
-                break;
-            case NONE:
-                if(!isNotificationLive(Constants.NONE_NOTIFICATION_ID)) {
-                    if (!text.isEmpty())
-                        manager.notify(Constants.NONE_NOTIFICATION_ID, buildNotification(null, text, altText, alts));
-                }
-                break;
-        }
+        manager.notify(Constants.NONE_NOTIFICATION_ID, buildNotification(socialNetwork, altText, concepts, alts));
+
     }
 
-    private Notification buildNotification(String socialNetworkName, String text, boolean altText, ArrayList<String> alts){
+    private Notification buildNotification(APIMessageHandler.SOCIAL_NETWORK socialNetwork, String altText, boolean concepts, ArrayList<String> alts){
 
-        if(altText) {
+        String text = "";
+        switch (socialNetwork){
+            case FACEBOOK:
+                if(concepts)
+                    text = String.format(context.getString(R.string.notification_text_alt_not_found), "Facebook", altText);
+                else
+                    text = String.format(context.getString(R.string.notification_text), "Facebook", altText, context.getString(R.string.notification_text_facebook));
+                break;
+            case TWITTER:
+                if(concepts)
+                    text = String.format(context.getString(R.string.notification_text_alt_not_found), "Twitter", altText);
+                else
+                    text = String.format(context.getString(R.string.notification_text), "Twitter", altText, context.getString(R.string.notification_text_twitter));
+                break;
+            case NONE:
+                if(concepts)
+                    text = String.format(context.getString(R.string.notification_text_alt_not_found_none), altText);
+                else
+                    text = String.format(context.getString(R.string.notification_text_none), altText);
+                break;
+        }
+
+        if(!concepts) {
             Intent iAction1 = new Intent(context, NotificationActionsService.class);
             iAction1.setAction(NotificationActionsService.COPY_TO_CLIPBOARD);
-            iAction1.putExtra("altText", text);
+            iAction1.putExtra("altText", altText);
             PendingIntent piAction1 = PendingIntent.getService(context, 0, iAction1, PendingIntent.FLAG_UPDATE_CURRENT);
             NotificationCompat.Action action1 =
                     new NotificationCompat.Action.Builder(
@@ -78,57 +79,29 @@ public class NotificationController {
                             0, "Get more alt text", piAction2
                     ).build();
 
-            if(socialNetworkName == null){
-                return new NotificationCompat.Builder(context, CHANNEL_ID)
+            return new NotificationCompat.Builder(context, CHANNEL_ID)
                         .setSmallIcon(R.mipmap.ic_notification_foreground)
                         .setContentTitle("Sonaar")
                         .setStyle(new
-                                NotificationCompat.BigTextStyle().bigText("Sonaar found a possible altText to your image: " + text))
-                        .setContentText("Sonaar found a possible altText to your image: " + text)
+                                NotificationCompat.BigTextStyle().bigText(
+                                text))
+                        .setContentText(text)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .addAction(action1)
                         .addAction(action2)
                         .setAutoCancel(true)
                         .build();
-            }else {
-                return new NotificationCompat.Builder(context, CHANNEL_ID)
-                        .setSmallIcon(R.mipmap.ic_notification_foreground)
-                        .setContentTitle("Sonaar")
-                        .setStyle(new
-                                NotificationCompat.BigTextStyle().bigText("Sonaar detected that you are posting a image to " + socialNetworkName +
-                                ". A possible altText to your image is: " + text + ". Please consider add it to your image post. To do so click on the +Alt button on the bottom right corner of the image."))
-                        .setContentText("Sonaar detected that you are posting a image to " + socialNetworkName +
-                                ". A possible altText to your image is: " + text + ". Please consider add it to your image post. To do so click on the +Alt button on the bottom right corner of the image.")
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .addAction(action1)
-                        .addAction(action2)
-                        .setAutoCancel(true)
-                        .build();
-            }
+
         }else {
-            if(socialNetworkName == null){
-                return new NotificationCompat.Builder(context, CHANNEL_ID)
+            return new NotificationCompat.Builder(context, CHANNEL_ID)
                         .setSmallIcon(R.mipmap.ic_notification_foreground)
                         .setContentTitle("Sonaar")
                         .setStyle(new
-                                NotificationCompat.BigTextStyle().bigText("Sonaar could not find an altText, but found some possible concepts about the image: " + text))
-                        .setContentText("Sonaar could not find an altText, but found some possible concepts about the image: " + text)
+                                NotificationCompat.BigTextStyle().bigText(text))
+                        .setContentText(text)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setAutoCancel(true)
                         .build();
-            }else {
-                return new NotificationCompat.Builder(context, CHANNEL_ID)
-                        .setSmallIcon(R.mipmap.ic_notification_foreground)
-                        .setContentTitle("Sonaar")
-                        .setStyle(new
-                                NotificationCompat.BigTextStyle().bigText("Sonaar detected that you are posting a image to " + socialNetworkName +
-                                ". We could not find an altText, but found some possible concepts about the image: " + text))
-                        .setContentText("Sonaar detected that you are posting a image to " + socialNetworkName +
-                                ". We could not find an altText, but found some possible concepts about the image: " + text)
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setAutoCancel(true)
-                        .build();
-            }
         }
     }
 

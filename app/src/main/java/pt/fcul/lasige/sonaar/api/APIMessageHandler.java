@@ -44,12 +44,12 @@ public class APIMessageHandler{
                     }
 
                     Controller.getInstance().setSonaarAltText(alts.get(0));
-                    notificationController.sendNotification(socialNetwork, alts.get(0), true, alts);
+                    notificationController.sendNotification(socialNetwork, alts.get(0), false, alts);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }else if (message.concepts != null){
-                notificationController.sendNotification(socialNetwork, message.concepts, false, null);
+                notificationController.sendNotification(socialNetwork, message.concepts, true, null);
             }
         }else {
             if(Constants.PRINT_API_RESPONSE)
