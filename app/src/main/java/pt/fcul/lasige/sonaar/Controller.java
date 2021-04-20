@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import pt.fcul.lasige.sonaar.api.APIClient;
-import pt.fcul.lasige.sonaar.api.APIMessageHandler;
+import pt.fcul.lasige.sonaar.api.MessageHandler;
 import pt.fcul.lasige.sonaar.notifications.NotificationController;
 import pt.fcul.lasige.sonaar.overlay.Overlay;
 import pt.fcul.lasige.sonaar.util.AccessibilityServiceUtils;
@@ -23,7 +23,7 @@ public class Controller {
     private boolean canISetAltText = true;
     private AccessibilityService service;
     private NotificationController notificationController;
-    private APIMessageHandler messageHandler;
+    private MessageHandler messageHandler;
     private byte[] currentImage;
     private String userAltText;
     private String sonaarAltText;
@@ -44,7 +44,7 @@ public class Controller {
         this.service = service;
         notificationController = new NotificationController(service.getApplicationContext());
         treeCrawlers = new TreeCrawlers();
-        messageHandler = new APIMessageHandler(notificationController);
+        messageHandler = new MessageHandler(notificationController);
         Overlay.getInstance().setContext(service);
     }
 
@@ -102,6 +102,7 @@ public class Controller {
             return;
         Counter counter = new Counter(0, 0);
         Rect imageBound = new Rect();
+
         switch (rootInActiveWindow.getPackageName().toString()){
             case Constants.FACEBOOK_PACKAGE:
                 //TODO IMPLEMENT
@@ -135,10 +136,10 @@ public class Controller {
 
                 if(counter.getPost() == Constants.FACEBOOK_POST_COUNTER){
                     if(imageBound.bottom == 0 && imageBound.top == 0 && imageBound.left == 0 && imageBound.right == 0){
-                        takeScreenshot(-1 , -1, -1, -1, APIMessageHandler.SOCIAL_NETWORK.FACEBOOK);
+                        takeScreenshot(-1 , -1, -1, -1, MessageHandler.SOCIAL_NETWORK.FACEBOOK);
                     }else{
                         takeScreenshot(imageBound.left , imageBound.top, //X,Y
-                                (imageBound.right - imageBound.left), (imageBound.bottom - imageBound.top), APIMessageHandler.SOCIAL_NETWORK.FACEBOOK);//width, height
+                                (imageBound.right - imageBound.left), (imageBound.bottom - imageBound.top), MessageHandler.SOCIAL_NETWORK.FACEBOOK);//width, height
                     }
                 }
 
@@ -156,17 +157,17 @@ public class Controller {
 
                 if(counter.getPost() == Constants.TWITTER_POST_COUNTER){
                     if(imageBound.bottom == 0 && imageBound.top == 0 && imageBound.left == 0 && imageBound.right == 0){
-                        takeScreenshot(-1 , -1, -1, -1, APIMessageHandler.SOCIAL_NETWORK.TWITTER);
+                        takeScreenshot(-1 , -1, -1, -1, MessageHandler.SOCIAL_NETWORK.TWITTER);
                     }else{
                         takeScreenshot(imageBound.left , imageBound.top, //X,Y
-                                (imageBound.right - imageBound.left), (imageBound.bottom - imageBound.top), APIMessageHandler.SOCIAL_NETWORK.TWITTER);//width, height
+                                (imageBound.right - imageBound.left), (imageBound.bottom - imageBound.top), MessageHandler.SOCIAL_NETWORK.TWITTER);//width, height
                     }
                 }
                 break;
         }
     }
 
-    private void takeScreenshot(int bitMapCutoutX, int bitMapCutoutY, int bitMapCutoutWidth, int bitMapCutoutHeight, APIMessageHandler.SOCIAL_NETWORK socialNetwork){
+    private void takeScreenshot(int bitMapCutoutX, int bitMapCutoutY, int bitMapCutoutWidth, int bitMapCutoutHeight, MessageHandler.SOCIAL_NETWORK socialNetwork){
 
         if(!canITakeScreenshot)
             return;

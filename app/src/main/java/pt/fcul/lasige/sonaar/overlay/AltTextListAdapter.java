@@ -45,6 +45,11 @@ public class AltTextListAdapter extends RecyclerView.Adapter<AltTextListAdapter.
         this.listener = listener;
     }
 
+    public void setLocalDataSet(ArrayList<String> localDataSet) {
+        this.localDataSet = localDataSet;
+        notifyDataSetChanged();
+    }
+
     // Create new views (invoked by the layout manager)
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {

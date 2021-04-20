@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sonaar</string>
+    <string name="next">Próximo</string>
+    <string name="i_accept">Eu aceito</string>
+    <string name="exit">Sair</string>
+    <string name="start">Começar a usar o SONAAR</string>
+    <string name="title_activity_settings">Definições</string>
+    <string name="settings">Definições</string>
+    <string name="notification_text">O SONAAR detetou que está a partilhar uma imagem na rede social %1$s. Um possível texto alternativo para a imagem é: %2$s. Considere adicioná-lo à partilha da sua imagem. %3$s</string>
+    <string name="notification_text_twitter">Para tal clique no botão +Alt.</string>
+    <string name="notification_text_facebook">Para tal publique a imagem, depois abra a imagem e clique no botao de mais opções (botão 3 pontinhos) e selecione "Editar o texto alternativo".</string>
+    <string name="notification_text_none">O SONAAR encontrou um possível texto alternativo para a imagem: %1$s</string>
+    <string name="notification_text_alt_not_found_none">SONAAR não conseguiu encontrar um texto alternativo, mas encontrou alguns conceitos sobre a imagem: %1$s</string>
+    <string name="page_5_text">Ao usar o SONAAR, aceita que o sejam recolhidas descrições textuais de imagens que partilha no Twitter ou no Facebook. O SONAAR não guarda nenhuma informção que o/a possa identificar, apenas guarda a imagem e a sua descrição textual.</string>
+    <string name="page_4_text">Accesso recusado! Para poder enviar a captura de ecrã para a nossa base de dados, o SONAAR precisa de acesso à sua galeria de imagens.</string>
+    <string name="page_3_text">Para poder enviar a captura de ecrã para a nossa base de dados, o SONAAR precisa de acesso à sua galeria de imagens. O SONAAR vai pedir esse acesso a seguir.</string>
+    <string name="page_1_text">O SONAAR é um serviço que o/a ajuda a criar conteúdo acessível nas suas redes sociais (neste momento são suportadas o Twitter e o Facebook)</string>
+    <string name="page_2_text_1">Quando o SONAAR deteta que está a partilhar uma imagem, vai receber uma notificação com um possível texto alternativo que descreve a imagem e pode ser usado na sua partilha.</string>
+    <string name="page_2_text_2">Para o conseguir, o SONAAR precisa de capturar o ecrã do seu dispositivo, recortá-lo para o tamanho ideal e enviar a captura para o nosso servidor. No servidor procuramos a imagem na nossa base de dados. E se já a tivermos não a guardamos, mas enviamos todas as descrições associadas à imagem. Se não a tivermos, guardamos a imagem, e geramos uma descrição para enviar. Quando completa a partilha guardamos a descrição que criou para que possamos ajudar outros utilizadores no futuro.</string>
+    <string name="page_2_text_3">Ao clicar \"Eu aceito\", aceita a coleção de dados.</string>
+    <string name="notification_text_alt_not_found">O SONAAR detetou que está a partilhar uma imagem na rede social %1$s. Não foi possível encontrar um texto alternativo, mas encontrou alguns conceitos sobre a imagem: %2$s.</string>
+    <string name="please_activate_the_sonaar_service_on_the_accessibility_settings_menu">Por favor ative o serviço do SONAAR nas definições de acessibilidade.</string>
+    <string name="go_to_accessibility_settings">Ir para definições de acessibilidade</string>
+</resources>

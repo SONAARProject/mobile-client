@@ -1,23 +1,37 @@
 package pt.fcul.lasige.sonaar.sharetarget;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
-import pt.fcul.lasige.sonaar.notifications.NotificationController;
+import pt.fcul.lasige.sonaar.Controller;
 import pt.fcul.lasige.sonaar.R;
 import pt.fcul.lasige.sonaar.api.APIClient;
-import pt.fcul.lasige.sonaar.api.APIMessageHandler;
+import pt.fcul.lasige.sonaar.api.MessageHandler;
+import pt.fcul.lasige.sonaar.overlay.AltTextListAdapter;
 
-public class ShareTarget extends AppCompatActivity {
+public class ShareTarget extends AppCompatActivity  implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +42,21 @@ public class ShareTarget extends AppCompatActivity {
         Intent intent = getIntent();
         String action = intent.getAction();
         String type = intent.getType();
+
+        AltTextListAdapter mAdapter = new AltTextListAdapter(this, new ArrayList<>());
+
+        TextView alt = findViewById(R.id.tv_altText);
+
+        alt.setOnClickListener(this);
+        RecyclerView mRecyclerView = findViewById(R.id.rv_more_alt_texts);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, mLayoutManager.getOrientation());
+
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+
+        findViewById(R.id.bt_show_more).setVisibility(View.VISIBLE);
 
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if (type.startsWith("image/")) {
@@ -42,14 +71,47 @@ public class ShareTarget extends AppCompatActivity {
 
                         APIClient.searchImageFile(
                                 bos.toByteArray(),
-                                new APIMessageHandler(new NotificationController(getApplicationContext())),
-                                APIMessageHandler.SOCIAL_NETWORK.NONE);
+                                (message, socialNetwork) -> {
+                                    if (message.alts != null){
+                                        try {
+                                            JSONArray array = new JSONArray(message.alts);
+                                            ArrayList<String> alts = new ArrayList<String>();
+
+                                            for (int i=0;i<array.length();i++){
+                                                JSONObject jsonObject = array.getJSONObject(i);
+                                                alts.add(jsonObject.getString("AltText"));
+                                            }
+
+                                            Controller.getInstance().setSonaarAltText(alts.get(0));
+                                            alt.setText(alts.get(0));
+                                            mAdapter.setLocalDataSet(alts);
+                                            if (alts.size() > 1)
+                                                findViewById(R.id.bt_show_more).setVisibility(View.VISIBLE);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                },
+                                MessageHandler.SOCIAL_NETWORK.NONE);
 
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
+
+                findViewById(R.id.bt_show_more).setOnClickListener(v -> {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                });
+
             }
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("altText", ((TextView) v).getText().toString());
+        clipboard.setPrimaryClip(clip);
+        Controller.getInstance().setSonaarAltText(((TextView) v).getText().toString());
     }
 }

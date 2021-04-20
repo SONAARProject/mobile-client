@@ -7,6 +7,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -44,7 +45,7 @@ public class APIClient {
         return retrofit;
     }
 
-    public static void searchImageUrl(String url, APIMessageHandler messageHandler, APIMessageHandler.SOCIAL_NETWORK socialNetwork){
+    public static void searchImageUrl(String url, IMessageHandler messageHandler, MessageHandler.SOCIAL_NETWORK socialNetwork){
 
         Call<Message> call1 = getClient().create(APIInterface.class).searchImageUrl(url);
         call1.enqueue(new Callback<Message>() {
@@ -64,9 +65,9 @@ public class APIClient {
         });
     }
 
-    public static void searchImageFile(byte[] bytes, APIMessageHandler messageHandler, APIMessageHandler.SOCIAL_NETWORK socialNetwork){
+    public static void searchImageFile(byte[] bytes, IMessageHandler messageHandler, MessageHandler.SOCIAL_NETWORK socialNetwork){
 
-        Call<Message> call = getClient().create(APIInterface.class).searchImageBinary(Base64.encodeToString(bytes, Base64.NO_WRAP));
+        Call<Message> call = getClient().create(APIInterface.class).searchImageBinary(Base64.encodeToString(bytes, Base64.NO_WRAP), Locale.getDefault().getLanguage());
         call.enqueue(new Callback<Message>() {
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {

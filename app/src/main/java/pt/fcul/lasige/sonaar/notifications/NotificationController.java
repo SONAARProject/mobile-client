@@ -14,7 +14,7 @@ import androidx.core.app.NotificationCompat;
 import java.util.ArrayList;
 
 import pt.fcul.lasige.sonaar.R;
-import pt.fcul.lasige.sonaar.api.APIMessageHandler;
+import pt.fcul.lasige.sonaar.api.MessageHandler;
 import pt.fcul.lasige.sonaar.data.Constants;
 
 
@@ -28,7 +28,7 @@ public class NotificationController {
         createChannel();
     }
 
-    public void sendNotification(APIMessageHandler.SOCIAL_NETWORK socialNetwork, String altText, boolean concepts, ArrayList<String> alts) {
+    public void sendNotification(MessageHandler.SOCIAL_NETWORK socialNetwork, String altText, boolean concepts, ArrayList<String> alts) {
 
         // Show notification
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -36,7 +36,7 @@ public class NotificationController {
 
     }
 
-    private Notification buildNotification(APIMessageHandler.SOCIAL_NETWORK socialNetwork, String altText, boolean concepts, ArrayList<String> alts){
+    private Notification buildNotification(MessageHandler.SOCIAL_NETWORK socialNetwork, String altText, boolean concepts, ArrayList<String> alts){
 
         String text = "";
         switch (socialNetwork){

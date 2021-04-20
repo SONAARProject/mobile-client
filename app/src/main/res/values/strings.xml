@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Sonaar</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="next">Next</string>
     <string name="i_accept">I accept</string>
     <string name="exit">Exit</string>
@@ -12,29 +11,16 @@
     <string name="page_1_text">SONAAR is a service that helps you create accessible content on you social networks (currently supported social networks are Twitter and Facebook)</string>
     <string name="page_2_text_1">When SONAAR detects that you are tweeting or posting an image, you will receive a notification with a proposed text description of the image that you can use in your tweet or post.</string>
     <string name="page_2_text_2">To be able to achieve this, SONAAR needs to take a screenshot of your phone, crop it to the image size and send it to our server. There we search for the image. If we already have it we don\'t even store it, but we will be able to send you any descriptions we have stored. If we don\'t have it, we store it, generate a description and send it to you. When you complete your post or tweet we store any description you created so that it can help other users in the future.</string>
-    <string name="page_2_text_3">By clicking I Acceptyou are agreeing with this collection</string>
-    <string name="consent">consent</string>
-    <string name="title_activity_settings">SettingsActivity</string>
-
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="page_2_text_3">By clicking \"I Accept\", you are agreeing with this collection</string>
+    <string name="consent" translatable="false">consent</string>
+    <string name="title_activity_settings">Settings</string>
     <string name="settings">Settings</string>
-    <string name="notification_text">Sonaar detected that you are posting a image to %1$s. A possible altText to your image is: %2$s. Please consider add it to your image post. %3$s</string>
-    <string name="notification_text_twitter">To do so click on the +Alt button on the bottom right corner of the image.</string>
+    <string name="notification_text">SONAAR detected that you are posting a image to %1$s. A possible altText to your image is: %2$s. Please consider add it to your image post. %3$s</string>
+    <string name="notification_text_twitter">To do so click on the +Alt button.</string>
     <string name="notification_text_facebook">To do so publish the image, then open it and click on the more button (3 dot button) and select "Edit alt text".</string>
-    <string name="notification_text_none">Sonaar found a possible altText to your image: %1$s</string>
-    <string name="notification_text_alt_not_found_none">Sonaar could not find an altText, but found some possible concepts about the image: %1$s</string>
-    <string name="notification_text_alt_not_found">Sonaar detected that you are posting a image to %1$s. We could not find an altText, but found some possible concepts about the image: %2$s.</string>
+    <string name="notification_text_none">SONAAR found a possible altText to your image: %1$s</string>
+    <string name="notification_text_alt_not_found_none">SONAAR could not find an altText, but found some possible concepts about the image: %1$s</string>
+    <string name="notification_text_alt_not_found">SONAAR detected that you are posting a image to %1$s. We could not find an altText, but found some possible concepts about the image: %2$s.</string>
+    <string name="please_activate_the_sonaar_service_on_the_accessibility_settings_menu">Please activate the SONAAR service on the accessibility settings menu.</string>
+    <string name="go_to_accessibility_settings">Go to accessibility settings</string>
 </resources>

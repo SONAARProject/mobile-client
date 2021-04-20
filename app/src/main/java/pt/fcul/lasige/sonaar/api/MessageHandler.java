@@ -13,13 +13,13 @@ import pt.fcul.lasige.sonaar.notifications.NotificationController;
 import pt.fcul.lasige.sonaar.api.pojo.Message;
 import pt.fcul.lasige.sonaar.data.Constants;
 
-public class APIMessageHandler{
+public class MessageHandler implements IMessageHandler {
 
     private NotificationController notificationController;
 
     public enum SOCIAL_NETWORK{TWITTER, FACEBOOK, INSTAGRAM, NONE}
 
-    public APIMessageHandler(NotificationController notificationController) {
+    public MessageHandler(NotificationController notificationController) {
         this.notificationController = notificationController;
     }
 
@@ -42,7 +42,6 @@ public class APIMessageHandler{
                         JSONObject jsonObject = array.getJSONObject(i);
                         alts.add(jsonObject.getString("AltText"));
                     }
-
                     Controller.getInstance().setSonaarAltText(alts.get(0));
                     notificationController.sendNotification(socialNetwork, alts.get(0), false, alts);
                 } catch (JSONException e) {

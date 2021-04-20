@@ -15,7 +15,7 @@ public interface APIInterface {
 
     @FormUrlEncoded
     @POST("search/")
-    Call<Message> searchImageBinary(@Field("imageBase64") String imageBase64);
+    Call<Message> searchImageBinary(@Field("imageBase64") String imageBase64, @Field("lang") String lang);
 
     @FormUrlEncoded
     @POST("insertBase64/")

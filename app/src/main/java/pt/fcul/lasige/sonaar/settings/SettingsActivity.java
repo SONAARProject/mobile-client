@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
@@ -14,6 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import org.w3c.dom.Text;
+
+import pt.fcul.lasige.sonaar.BuildConfig;
 import pt.fcul.lasige.sonaar.R;
 import pt.fcul.lasige.sonaar.util.ImageUtils;
 
@@ -33,6 +37,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        ((TextView) findViewById(R.id.tv_version)).setText(BuildConfig.VERSION_NAME);
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:text='Please activate the "Sonaar" service on the accessibility settings menu.'
+        android:text="@string/please_activate_the_sonaar_service_on_the_accessibility_settings_menu"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +24,7 @@
         android:id="@+id/bt_open_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Go to accessibility settings"
+        android:text="@string/go_to_accessibility_settings"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

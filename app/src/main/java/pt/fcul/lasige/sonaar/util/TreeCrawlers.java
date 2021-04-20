@@ -14,25 +14,27 @@ public class TreeCrawlers {
             return;
 
         if (node.getContentDescription() != null) {
-            if (node.getContentDescription().toString().equals("Photo")) {
+            Log.d("PTPTPTPT", node.getContentDescription().toString());
+            if (node.getContentDescription().toString().equals("Photo") || node.getContentDescription().toString().equals("Foto")) {
                 node.getBoundsInScreen(imageBound);
                 counter.incPost();
-            } else if (node.getContentDescription().toString().equals("Tap to edit your photo")) {
+            } else if (node.getContentDescription().toString().equals("Tap to edit your photo") || node.getContentDescription().toString().equals("Toca para editares a tua foto")) {
                 counter.incPost();
-            } else if (node.getContentDescription().toString().equals("Cancel Photo")) {
+            } else if (node.getContentDescription().toString().equals("Cancel Photo") || node.getContentDescription().toString().equals("Remover foto")) {
                 counter.incPost();
-            } else if (node.getContentDescription().toString().equals("Add to your post")) {
+            } else if (node.getContentDescription().toString().equals("Add to your post") || node.getContentDescription().toString().equals("Adicionar à tua publicação")) {
                 counter.incPost();
-            } else if (node.getContentDescription().toString().equals("Live")) {
+            } else if (node.getContentDescription().toString().equals("Live") || node.getContentDescription().toString().equals("Direto")) {
                 counter.incFeed();
-            } else if (node.getContentDescription().toString().equals("Photo")) {
+            } else if (node.getContentDescription().toString().equals("Photo") || node.getContentDescription().toString().equals("Foto")) {
                 counter.incFeed();
             } else if (node.getContentDescription().toString().equals("Room")) {
                 counter.incFeed();
             }
         }
         if (node.getText() != null) {
-            if (node.getText().toString().equals("Say something about this photo…")) {
+            Log.d("PTPTPTPT", node.getText().toString());
+            if (node.getText().toString().equals("Say something about this photo…") || node.getText().toString().equals("Diz algo sobre esta foto..")) {
                 counter.incPost();
             }
         }
