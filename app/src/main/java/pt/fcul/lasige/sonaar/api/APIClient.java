@@ -47,7 +47,7 @@ public class APIClient {
 
     public static void searchImageUrl(String url, IMessageHandler messageHandler, MessageHandler.SOCIAL_NETWORK socialNetwork){
 
-        Call<Message> call1 = getClient().create(APIInterface.class).searchImageUrl(url);
+        Call<Message> call1 = getClient().create(APIInterface.class).searchImageUrl(url, Locale.getDefault().getLanguage());
         call1.enqueue(new Callback<Message>() {
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {
@@ -84,9 +84,9 @@ public class APIClient {
         });
     }
 
-    public static void insertImageAndAltText(byte[] bytes, String altText){
+    public static void insertImageAndAltText(byte[] bytes, String altText, String postText){
 
-        Call<Message> call = getClient().create(APIInterface.class).insertBase64(Base64.encodeToString(bytes, Base64.NO_WRAP), altText);
+        Call<Message> call = getClient().create(APIInterface.class).insertBase64(Base64.encodeToString(bytes, Base64.NO_WRAP), altText, postText, Locale.getDefault().getLanguage());
         call.enqueue(new Callback<Message>() {
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {

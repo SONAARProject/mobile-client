@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +34,7 @@ public class Overlay implements View.OnClickListener{
 
     private WindowManager windowManager;
     private LayoutInflater li;
-    private ViewGroup altTextList;
+    private ViewGroup rootViewGroup;
     private AccessibilityService service;
 
     private static Overlay instance;
@@ -56,23 +57,28 @@ public class Overlay implements View.OnClickListener{
         this.service = service;
     }
 
-    public void showAltTextList(ArrayList<String> altText){
-        altTextList = (ViewGroup) li.inflate(R.layout.alt_text_list, null);
-        altTextList.findViewById(R.id.bt_close).setOnClickListener(v -> {
+    public void showAltTextList(ArrayList<String> altTextList, ArrayList<String> conceptsList, ArrayList<String> textList){
+        rootViewGroup = (ViewGroup) li.inflate(R.layout.alt_text_list, null);
+        rootViewGroup.findViewById(R.id.bt_close).setOnClickListener(v -> {
             hideAltTextList();
         });
-        RecyclerView mRecyclerView = (RecyclerView) altTextList.findViewById(R.id.rv_alt_text_list);
-        AltTextListAdapter mAdapter = new AltTextListAdapter(this, altText);
+
+        altTextList.addAll(conceptsList);
+        altTextList.addAll(textList);
+
+        RecyclerView mRecyclerView = (RecyclerView) rootViewGroup.findViewById(R.id.rv_alt_text_list);
+        AltTextListAdapter mAdapter = new AltTextListAdapter(this, altTextList);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(service);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         params.gravity = Gravity.TOP | Gravity.END;
-        addView(altTextList, params);
+        params.height = 1000;
+        addView(rootViewGroup, params);
     }
 
     public void hideAltTextList(){
-        if(altTextList != null)
-            removeView(altTextList);
+        if(rootViewGroup != null)
+            removeView(rootViewGroup);
     }
 
     private void addView(View v, WindowManager.LayoutParams lp){

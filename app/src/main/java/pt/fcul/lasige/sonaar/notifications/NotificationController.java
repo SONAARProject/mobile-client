@@ -28,55 +28,57 @@ public class NotificationController {
         createChannel();
     }
 
-    public void sendNotification(MessageHandler.SOCIAL_NETWORK socialNetwork, String altText, boolean concepts, ArrayList<String> alts) {
+    public void sendNotification(MessageHandler.SOCIAL_NETWORK socialNetwork, ArrayList<String> altsList, ArrayList<String> conceptsList, ArrayList<String> textList) {
 
         // Show notification
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(Constants.NONE_NOTIFICATION_ID, buildNotification(socialNetwork, altText, concepts, alts));
+        manager.notify(Constants.NONE_NOTIFICATION_ID, buildNotification(socialNetwork, altsList, conceptsList, textList));
 
     }
 
-    private Notification buildNotification(MessageHandler.SOCIAL_NETWORK socialNetwork, String altText, boolean concepts, ArrayList<String> alts){
+    private Notification buildNotification(MessageHandler.SOCIAL_NETWORK socialNetwork, ArrayList<String> altsList, ArrayList<String> conceptsList, ArrayList<String> textList){
 
         String text = "";
         switch (socialNetwork){
             case FACEBOOK:
-                if(concepts)
-                    text = String.format(context.getString(R.string.notification_text_alt_not_found), "Facebook", altText);
+                if(altsList.size() == 0)
+                    text = String.format(context.getString(R.string.notification_text_alt_not_found), "Facebook", String.join(", ", conceptsList.subList(0, 3)), context.getString(R.string.notification_text_facebook_2));
                 else
-                    text = String.format(context.getString(R.string.notification_text), "Facebook", altText, context.getString(R.string.notification_text_facebook));
+                    text = String.format(context.getString(R.string.notification_text), "Facebook", altsList.get(0), context.getString(R.string.notification_text_facebook));
                 break;
             case TWITTER:
-                if(concepts)
-                    text = String.format(context.getString(R.string.notification_text_alt_not_found), "Twitter", altText);
+                if(altsList.size() == 0)
+                    text = String.format(context.getString(R.string.notification_text_alt_not_found), "Twitter", String.join(", ", conceptsList.subList(0, 3)), context.getString(R.string.notification_text_twitter_2));
                 else
-                    text = String.format(context.getString(R.string.notification_text), "Twitter", altText, context.getString(R.string.notification_text_twitter));
+                    text = String.format(context.getString(R.string.notification_text), "Twitter", altsList.get(0), context.getString(R.string.notification_text_twitter));
                 break;
             case NONE:
-                if(concepts)
-                    text = String.format(context.getString(R.string.notification_text_alt_not_found_none), altText);
+                if(altsList.size() == 0)
+                    text = String.format(context.getString(R.string.notification_text_alt_not_found_none), String.join(", ", conceptsList.subList(0, 3)));
                 else
-                    text = String.format(context.getString(R.string.notification_text_none), altText);
+                    text = String.format(context.getString(R.string.notification_text_none), altsList.get(0));
                 break;
         }
 
-        if(!concepts) {
+        if(altsList.size() > 0) {
             Intent iAction1 = new Intent(context, NotificationActionsService.class);
             iAction1.setAction(NotificationActionsService.COPY_TO_CLIPBOARD);
-            iAction1.putExtra("altText", altText);
+            iAction1.putExtra("altText", altsList.get(0));
             PendingIntent piAction1 = PendingIntent.getService(context, 0, iAction1, PendingIntent.FLAG_UPDATE_CURRENT);
             NotificationCompat.Action action1 =
                     new NotificationCompat.Action.Builder(
-                            0, "Copy to clipboard",piAction1
+                            0, context.getString(R.string.copy_clipboard),piAction1
                     ).build();
 
             Intent iAction2 = new Intent(context, NotificationActionsService.class);
             iAction2.setAction(NotificationActionsService.START_OVERLAY);
-            iAction2.putExtra("altTextList", alts);
+            iAction2.putExtra("altTextList", altsList);
+            iAction2.putExtra("conceptsList", conceptsList);
+            iAction2.putExtra("textList", textList);
             PendingIntent piAction2 = PendingIntent.getService(context, 0, iAction2, PendingIntent.FLAG_UPDATE_CURRENT);
             NotificationCompat.Action action2 =
                     new NotificationCompat.Action.Builder(
-                            0, "Get more alt text", piAction2
+                            0, context.getString(R.string.see_more), piAction2
                     ).build();
 
             return new NotificationCompat.Builder(context, CHANNEL_ID)
@@ -93,12 +95,24 @@ public class NotificationController {
                         .build();
 
         }else {
+            Intent iAction2 = new Intent(context, NotificationActionsService.class);
+            iAction2.setAction(NotificationActionsService.START_OVERLAY);
+            iAction2.putExtra("altTextList", altsList);
+            iAction2.putExtra("conceptsList", conceptsList);
+            iAction2.putExtra("textList", textList);
+            PendingIntent piAction2 = PendingIntent.getService(context, 0, iAction2, PendingIntent.FLAG_UPDATE_CURRENT);
+            NotificationCompat.Action action2 =
+                    new NotificationCompat.Action.Builder(
+                            0, context.getString(R.string.see_more), piAction2
+                    ).build();
+
             return new NotificationCompat.Builder(context, CHANNEL_ID)
                         .setSmallIcon(R.mipmap.ic_notification_foreground)
                         .setContentTitle("Sonaar")
                         .setStyle(new
                                 NotificationCompat.BigTextStyle().bigText(text))
                         .setContentText(text)
+                        .addAction(action2)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setAutoCancel(true)
                         .build();

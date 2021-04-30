@@ -34,7 +34,9 @@ public class NotificationActionsService extends IntentService {
                     ClipData clip = ClipData.newPlainText("altText", intent.getStringExtra("altText"));
                     clipboard.setPrimaryClip(clip);
                 } else if (START_OVERLAY.equals(action)) {
-                    Overlay.getInstance().showAltTextList(intent.getStringArrayListExtra("altTextList"));
+                    Overlay.getInstance().showAltTextList(intent.getStringArrayListExtra("altTextList"),
+                            intent.getStringArrayListExtra("conceptsList"),
+                            intent.getStringArrayListExtra("textList"));
                 } else {
                     throw new IllegalArgumentException("Unsupported action: " + action);
                 }

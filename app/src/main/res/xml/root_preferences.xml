@@ -1,13 +1,13 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory app:title="Alt text upload">
+<!--    <PreferenceCategory app:title="Alt text upload">-->
 
-        <SwitchPreferenceCompat
-            app:key="ask"
-            app:title="Ask for consent to share alt text with SONAAR"/>
+<!--        <SwitchPreferenceCompat-->
+<!--            app:key="ask"-->
+<!--            app:title="Ask for consent to share alt text with SONAAR"/>-->
 
-    </PreferenceCategory>
+<!--    </PreferenceCategory>-->
 
     <PreferenceCategory app:title="Screenshots handling">
 
@@ -22,6 +22,11 @@
             android:summary="This will revoke the permission to take screenshots"
             />
 
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/help_us_improve">
+        <Preference
+            android:key="report_problem"
+            android:title="@string/report_problem" />
     </PreferenceCategory>
 
 </PreferenceScreen>

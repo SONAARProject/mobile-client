@@ -14,7 +14,6 @@ public class TreeCrawlers {
             return;
 
         if (node.getContentDescription() != null) {
-            Log.d("PTPTPTPT", node.getContentDescription().toString());
             if (node.getContentDescription().toString().equals("Photo") || node.getContentDescription().toString().equals("Foto")) {
                 node.getBoundsInScreen(imageBound);
                 counter.incPost();
@@ -151,6 +150,22 @@ public class TreeCrawlers {
 
         for (int i = 0; i < node.getChildCount(); i++) {
             runNodeTreeForTwitterAltText(node.getChild(i));
+        }
+//        node.recycle();
+    }
+
+    public void runNodeTreeForTwitterPostText(AccessibilityNodeInfo node) {
+        if (node == null)
+            return;
+
+        if (node.getViewIdResourceName() != null) {
+            if (node.getViewIdResourceName().equals("com.twitter.android:id/tweet_text")) {
+                Controller.getInstance().setPostText(node.getText().toString());
+            }
+        }
+
+        for (int i = 0; i < node.getChildCount(); i++) {
+            runNodeTreeForTwitterPostText(node.getChild(i));
         }
 //        node.recycle();
     }

@@ -31,25 +31,14 @@ public class MessageHandler implements IMessageHandler {
                 Log.d("APIRESPONSE", String.format("status: %s", message.status));
                 Log.d("APIRESPONSE", String.format("alts: %s", message.alts));
                 Log.d("APIRESPONSE", String.format("concepts: %s", message.concepts));
+                Log.d("APIRESPONSE", String.format("text: %s", message.text));
             }
 
-            if (message.alts != null){
-                try {
-                    JSONArray array = new JSONArray(message.alts);
-                    ArrayList<String> alts = new ArrayList<String>();
+            ArrayList<String> altsList = message.getAltsList();
+            ArrayList<String> conceptsList = message.getConceptsList();
+            ArrayList<String> textList = message.getTextList();
 
-                    for (int i=0;i<array.length();i++){
-                        JSONObject jsonObject = array.getJSONObject(i);
-                        alts.add(jsonObject.getString("AltText"));
-                    }
-                    Controller.getInstance().setSonaarAltText(alts.get(0));
-                    notificationController.sendNotification(socialNetwork, alts.get(0), false, alts);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }else if (message.concepts != null){
-                notificationController.sendNotification(socialNetwork, message.concepts, true, null);
-            }
+            notificationController.sendNotification(socialNetwork, altsList, conceptsList, textList);
         }else {
             if(Constants.PRINT_API_RESPONSE)
                 Log.d("APIRESPONSE", "EMPTY RESPONSE");

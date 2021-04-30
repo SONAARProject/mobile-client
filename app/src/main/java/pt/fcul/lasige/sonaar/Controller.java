@@ -27,6 +27,7 @@ public class Controller {
     private byte[] currentImage;
     private String userAltText;
     private String sonaarAltText;
+    private String postText = "";
     private TreeCrawlers treeCrawlers;
 
     private static Controller controller;
@@ -46,6 +47,10 @@ public class Controller {
         treeCrawlers = new TreeCrawlers();
         messageHandler = new MessageHandler(notificationController);
         Overlay.getInstance().setContext(service);
+    }
+
+    public void setPostText(String postText) {
+        this.postText = postText;
     }
 
     public void setUserAltText(String userAltText) {
@@ -89,7 +94,7 @@ public class Controller {
             case Constants.TWITTER_PACKAGE:
                 if(source.getClassName().equals("android.widget.Button") && source.getText().equals("TWEET")){
                     if(userAltText != null && !userAltText.equals(sonaarAltText) && currentImage != null) {
-                        APIClient.insertImageAndAltText(currentImage, userAltText);
+                        APIClient.insertImageAndAltText(currentImage, userAltText, postText);
                     }
                     cleanVariables();
                 }
@@ -118,6 +123,7 @@ public class Controller {
                 //get the View size to crop the screenshot
                 treeCrawlers.runNodeTreeTwitter(rootInActiveWindow, counter, imageBound);
                 treeCrawlers.runNodeTreeForTwitterAltText(rootInActiveWindow);
+                treeCrawlers.runNodeTreeForTwitterPostText(rootInActiveWindow);
                 analyseTreeRun(Constants.TWITTER_PACKAGE, counter, imageBound);
 
                 break;

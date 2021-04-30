@@ -10,8 +10,8 @@ import retrofit2.http.Path;
 
 public interface APIInterface {
 
-    @GET("search/{url}")
-    Call<Message> searchImageUrl(@Path("url") String url);
+    @GET("search/{lang}/{url}/")
+    Call<Message> searchImageUrl(@Path("url") String url, @Path("lang") String lang);
 
     @FormUrlEncoded
     @POST("search/")
@@ -19,5 +19,5 @@ public interface APIInterface {
 
     @FormUrlEncoded
     @POST("insertBase64/")
-    Call<Message> insertBase64(@Field("imageBase64") String imageBase64, @Field("altText") String altText);
+    Call<Message> insertBase64(@Field("imageBase64") String imageBase64, @Field("altText") String altText, @Field("postText") String postText, @Field("lang") String lang);
 }
