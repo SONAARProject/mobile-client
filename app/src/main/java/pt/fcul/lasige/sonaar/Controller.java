@@ -79,19 +79,24 @@ public class Controller {
 
     public void detectPostSubmission(AccessibilityNodeInfo source) {
         if(source == null ||
-                source.getPackageName() == null ||
-                source.getClassName() == null ||
-                source.getText() == null)
+                source.getPackageName() == null)
             return;
 
         switch (source.getPackageName().toString()){
             case Constants.FACEBOOK_PACKAGE:
-                //TODO IMPLEMENT
+                if(source.getClassName().toString().contains("android.widget.Button") && (source.getContentDescription().toString().equals("Guardar") || source.getContentDescription().toString().equals("Save"))){
+                    if(userAltText != null && !userAltText.equals(sonaarAltText) && currentImage != null) {
+                        APIClient.insertImageAndAltText(currentImage, userAltText, "");
+                    }
+                    cleanVariables();
+                }
                 break;
             case Constants.INSTAGRAM_PACKAGE:
                 //TODO IMPLEMENT
                 break;
             case Constants.TWITTER_PACKAGE:
+                if (source.getClassName() == null || source.getText() == null)
+                    return;
                 if(source.getClassName().equals("android.widget.Button") && source.getText().equals("TWEET")){
                     if(userAltText != null && !userAltText.equals(sonaarAltText) && currentImage != null) {
                         APIClient.insertImageAndAltText(currentImage, userAltText, postText);
@@ -105,13 +110,14 @@ public class Controller {
     public void detectPostCreation(AccessibilityNodeInfo rootInActiveWindow) {
         if(rootInActiveWindow == null)
             return;
-        Counter counter = new Counter(0, 0);
+        Counter counter = new Counter(0, 0, 0);
         Rect imageBound = new Rect();
 
         switch (rootInActiveWindow.getPackageName().toString()){
             case Constants.FACEBOOK_PACKAGE:
                 //TODO IMPLEMENT
                 treeCrawlers.runNodeTreeFacebook(rootInActiveWindow, counter, imageBound);
+                treeCrawlers.runNodeTreeForFacebookAltText(rootInActiveWindow);
                 analyseTreeRun(Constants.FACEBOOK_PACKAGE, counter, imageBound);
                 break;
             case Constants.INSTAGRAM_PACKAGE:
@@ -135,7 +141,6 @@ public class Controller {
         switch (appRun){
             case Constants.FACEBOOK_PACKAGE:
 
-                Log.d("FEED", " " + counter.getFeed());
                 if(counter.getFeed() == Constants.FACEBOOK_FEED_COUNTER){
                     cleanVariables();
                 }
@@ -146,6 +151,15 @@ public class Controller {
                     }else{
                         takeScreenshot(imageBound.left , imageBound.top, //X,Y
                                 (imageBound.right - imageBound.left), (imageBound.bottom - imageBound.top), MessageHandler.SOCIAL_NETWORK.FACEBOOK);//width, height
+                    }
+                }
+
+                if(counter.getAltText() == Constants.FACEBOOK_ALT_TEXT_COUNTER){
+                    if(imageBound.bottom == 0 && imageBound.top == 0 && imageBound.left == 0 && imageBound.right == 0){
+                        takeScreenshotNoSend(-1 , -1, -1, -1);
+                    }else{
+                        takeScreenshotNoSend(imageBound.left , imageBound.top, //X,Y
+                                (imageBound.right - imageBound.left), (imageBound.bottom - imageBound.top));//width, height
                     }
                 }
 
@@ -205,7 +219,40 @@ public class Controller {
             APIClient.searchImageFile(
                     currentImage,
                     messageHandler,
-                    socialNetwork);
+                    socialNetwork,
+                    "authoring");
+
+        }, 5000);
+    }
+
+    private void takeScreenshotNoSend(int bitMapCutoutX, int bitMapCutoutY, int bitMapCutoutWidth, int bitMapCutoutHeight){
+
+        if(!canITakeScreenshot)
+            return;
+
+        startScreenshotCoolDown();
+
+        // hide the soft keyboard if is showing
+        AccessibilityServiceUtils.hideKeyboard(service);
+        new Handler().postDelayed(() -> {
+            //give time to the keyboard disappear
+            //and take the screenshot
+            AccessibilityServiceUtils.takeScreenshot(service);
+
+            // activate back the keyboard
+            AccessibilityServiceUtils.showKeyboard(service);
+        }, 1000);
+        new Handler().postDelayed(() -> {
+
+            //give time to the screenshot to be written to disk
+            //crop the image and send the encoded image to our backend
+            //for searching an alt text
+            currentImage = ImageUtils.getImageToAPI(
+                    service,
+                    bitMapCutoutX,
+                    bitMapCutoutY,
+                    bitMapCutoutWidth,
+                    bitMapCutoutHeight);
 
         }, 5000);
     }
@@ -221,4 +268,7 @@ public class Controller {
         canITakeScreenshot = false;
     }
 
+    public String getString(int resId) {
+        return service.getString(resId);
+    }
 }

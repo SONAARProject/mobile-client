@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "439325086818",
+    "project_id": "sonaar-da147",
+    "storage_bucket": "sonaar-da147.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439325086818:android:17ba3a085912d015edad3b",
+        "android_client_info": {
+          "package_name": "pt.fcul.lasige.sonaar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "439325086818-qvcre5mm76ubce8fnjcjhq0u65uk1v8n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pt.fcul.lasige.sonaar",
+            "certificate_hash": "6fcf72916874d187cbb2e4bb4b6a4ab558f4177a"
+          }
+        },
+        {
+          "client_id": "439325086818-vfadp6cgbptt2gmh1kkckl9559eo6rh5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLACQz9jd9r2_BpmSRTzwj0_gCPzWjl9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "439325086818-vfadp6cgbptt2gmh1kkckl9559eo6rh5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

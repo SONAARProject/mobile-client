@@ -65,9 +65,9 @@ public class APIClient {
         });
     }
 
-    public static void searchImageFile(byte[] bytes, IMessageHandler messageHandler, MessageHandler.SOCIAL_NETWORK socialNetwork){
+    public static void searchImageFile(byte[] bytes, IMessageHandler messageHandler, MessageHandler.SOCIAL_NETWORK socialNetwork, String type){
 
-        Call<Message> call = getClient().create(APIInterface.class).searchImageBinary(Base64.encodeToString(bytes, Base64.NO_WRAP), Locale.getDefault().getLanguage());
+        Call<Message> call = getClient().create(APIInterface.class).searchImageBinary(Base64.encodeToString(bytes, Base64.NO_WRAP), Locale.getDefault().getLanguage(), type);
         call.enqueue(new Callback<Message>() {
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {

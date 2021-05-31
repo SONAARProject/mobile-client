@@ -9,17 +9,17 @@
 
 <!--    </PreferenceCategory>-->
 
-    <PreferenceCategory app:title="Screenshots handling">
+    <PreferenceCategory app:title="@string/screenshot_handling">
 
         <Preference
-            android:title="Delete all screenshots"
+            android:title="@string/delete_screenshots"
             android:key="delete"
-            android:summary="This will delete all screenshots on your phone"
+            android:summary="@string/delete_screenshots_summary"
             />
         <Preference
-            android:title="Revoke consent"
+            android:title="@string/revoke_consent"
             android:key="revoke"
-            android:summary="This will revoke the permission to take screenshots"
+            android:summary="@string/revoke_consent_summary"
             />
 
     </PreferenceCategory>

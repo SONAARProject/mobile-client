@@ -6,12 +6,19 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import pt.fcul.lasige.sonaar.Controller;
+import pt.fcul.lasige.sonaar.R;
 import pt.fcul.lasige.sonaar.data.Counter;
 
 public class TreeCrawlers {
     public void runNodeTreeFacebook(AccessibilityNodeInfo node, Counter counter, Rect imageBound) {
         if (node == null)
             return;
+
+        if(node.getParent() != null && node.getParent().getParent() != null){
+            if(node.getClassName().toString().contains("android.widget.Button") && node.getContentDescription() == null && node.getParent().getClassName().toString().contains("android.view.ViewGroup") && node.getParent().getParent().getClassName().toString().contains("android.widget.ScrollView")){
+                node.getBoundsInScreen(imageBound);
+            }
+        }
 
         if (node.getContentDescription() != null) {
             if (node.getContentDescription().toString().equals("Photo") || node.getContentDescription().toString().equals("Foto")) {
@@ -23,18 +30,35 @@ public class TreeCrawlers {
                 counter.incPost();
             } else if (node.getContentDescription().toString().equals("Add to your post") || node.getContentDescription().toString().equals("Adicionar à tua publicação")) {
                 counter.incPost();
-            } else if (node.getContentDescription().toString().equals("Live") || node.getContentDescription().toString().equals("Direto")) {
+            } else if (node.getContentDescription().toString().equals("Edit Photo") || node.getContentDescription().toString().equals("Editar foto")) {
+                counter.incPost();
+            }else if (node.getContentDescription().toString().equals("Live") || node.getContentDescription().toString().equals("Direto")) {
                 counter.incFeed();
             } else if (node.getContentDescription().toString().equals("Photo") || node.getContentDescription().toString().equals("Foto")) {
                 counter.incFeed();
             } else if (node.getContentDescription().toString().equals("Room")) {
                 counter.incFeed();
+            }else if (node.getContentDescription().toString().equals("Edit Alt Text") || node.getContentDescription().toString().equals("Editar o texto alternativo")) {
+
+                counter.incAltText();
+            }else if (node.getContentDescription().toString().equals("Add alternative text that describes the contents of the photo for people with visual impairments.") || node.getContentDescription().toString().equals("Adiciona texto alternativo que descreva os conteúdos da foto para pessoas com deficiência visual.")) {
+
+                counter.incAltText();
+            }else if (node.getContentDescription().toString().equals("Save") || node.getContentDescription().toString().equals("Guardar")) {
+
+                counter.incAltText();
             }
         }
+
         if (node.getText() != null) {
-            Log.d("PTPTPTPT", node.getText().toString());
-            if (node.getText().toString().equals("Say something about this photo…") || node.getText().toString().equals("Diz algo sobre esta foto..")) {
+
+            if (node.getText().toString().contains("Say something about this photo") || node.getText().toString().contains("Diz algo sobre esta foto")) {
                 counter.incPost();
+            } else if (node.getText().toString().equals("Create Post") || node.getText().toString().equals("Criar publicação")) {
+                counter.incPost();
+            }else if (node.getText().toString().contains("Write photo alternative text") || node.getText().toString().contains("Escreve o texto alternativo da foto")) {
+
+                counter.incAltText();
             }
         }
 
@@ -128,6 +152,31 @@ public class TreeCrawlers {
 //        node.recycle();
     }
 
+    public void runNodeTreeForFacebookAltText(AccessibilityNodeInfo node) {
+        if (node == null)
+            return;
+
+        if (node.getClassName().toString().contains("android.widget.EditText")) {
+            if(Controller.getInstance().getSonaarAltText() != null &&
+                    !Controller.getInstance().getSonaarAltText().isEmpty() &&
+                    Controller.getInstance().canISetAltText()
+            ){
+                Bundle arguments = new Bundle();
+                arguments.putCharSequence(AccessibilityNodeInfo
+                        .ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, Controller.getInstance().getString(R.string.alt_text_by_sonaar) + " " + Controller.getInstance().getSonaarAltText());
+                node.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, arguments);
+                Controller.getInstance().setCanISetAltText(false);
+            }
+            Controller.getInstance().setUserAltText(node.getText().toString());
+
+        }
+
+        for (int i = 0; i < node.getChildCount(); i++) {
+            runNodeTreeForFacebookAltText(node.getChild(i));
+        }
+//        node.recycle();
+    }
+
     public void runNodeTreeForTwitterAltText(AccessibilityNodeInfo node) {
         if (node == null)
             return;
@@ -140,7 +189,7 @@ public class TreeCrawlers {
                 ){
                     Bundle arguments = new Bundle();
                     arguments.putCharSequence(AccessibilityNodeInfo
-                            .ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, Controller.getInstance().getSonaarAltText());
+                            .ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, Controller.getInstance().getString(R.string.alt_text_by_sonaar) + " " + Controller.getInstance().getSonaarAltText());
                     node.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, arguments);
                     Controller.getInstance().setCanISetAltText(false);
                 }

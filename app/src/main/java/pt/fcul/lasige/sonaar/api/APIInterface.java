@@ -15,9 +15,14 @@ public interface APIInterface {
 
     @FormUrlEncoded
     @POST("search/")
-    Call<Message> searchImageBinary(@Field("imageBase64") String imageBase64, @Field("lang") String lang);
+    Call<Message> searchImageBinary(@Field("imageBase64") String imageBase64,
+                                    @Field("lang") String lang,
+                                    @Field("type") String type);
 
     @FormUrlEncoded
     @POST("insertBase64/")
-    Call<Message> insertBase64(@Field("imageBase64") String imageBase64, @Field("altText") String altText, @Field("postText") String postText, @Field("lang") String lang);
+    Call<Message> insertBase64(@Field("imageBase64") String imageBase64,
+                               @Field("altText") String altText,
+                               @Field("postText") String postText,
+                               @Field("lang") String lang);
 }

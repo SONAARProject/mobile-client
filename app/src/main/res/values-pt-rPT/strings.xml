@@ -22,7 +22,8 @@
     <string name="page_2_text_2">Para o conseguir, o SONAAR precisa de capturar o ecrã do seu dispositivo, recortá-lo para o tamanho ideal e enviar a captura para o nosso servidor. No servidor procuramos a imagem na nossa base de dados. E se já a tivermos não a guardamos, mas enviamos todas as descrições associadas à imagem. Se não a tivermos, guardamos a imagem, e geramos uma descrição para enviar. Quando completa a partilha guardamos a descrição que criou para que possamos ajudar outros utilizadores no futuro.</string>
     <string name="page_2_text_3">Ao clicar \"Eu aceito\", aceita a coleção de dados.</string>
     <string name="notification_text_alt_not_found">O SONAAR detetou que está a partilhar uma imagem na rede social %1$s. Não foi possível encontrar um texto alternativo, mas gerou automaticamente conceitos sobre a imagem: %2$s. %3$s</string>
-    <string name="please_activate_the_sonaar_service_on_the_accessibility_settings_menu">Por favor ative o serviço do SONAAR nas definições de acessibilidade.</string>
+    <string name="please_activate_the_sonaar_service_on_the_accessibility_settings_menu">Por favor ligue ou reinicie o serviço do SONAAR nas definições de acessibilidade.</string>
+    <string name="soonar_is_active">O SONAAR já está ativo.</string>
     <string name="go_to_accessibility_settings">Ir para definições de acessibilidade</string>
     <string name="image_not_found">O SONAAR não conseguiu encontrar uma imagem.</string>
     <string name="show_more">Mostrar mais</string>
@@ -41,4 +42,5 @@
     <string name="see_more">Ver mais</string>
     <string name="copy_clipboard">Copiar para o clipboard</string>
     <string name="click_on_one_item_to_copy_it_to_the_clipboard">Clique no item para o copiar para o clipboard</string>
+    <string name="alt_text_by_sonaar">Texto alternativo por sonaar:</string>
 </resources>

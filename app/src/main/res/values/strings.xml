@@ -23,7 +23,8 @@
     <string name="notification_text_none">SONAAR found a possible altText to your image: %1$s</string>
     <string name="notification_text_alt_not_found_none">SONAAR could not find an altText, but automatically generated some concepts about the image: %1$s</string>
     <string name="notification_text_alt_not_found">SONAAR detected that you are posting a image to %1$s. We could not find an altText, but automatically generated some concepts about the image: %2$s. %3$s</string>
-    <string name="please_activate_the_sonaar_service_on_the_accessibility_settings_menu">Please activate the SONAAR service on the accessibility settings menu.</string>
+    <string name="please_activate_the_sonaar_service_on_the_accessibility_settings_menu">Please start or restart the SONAAR service on the accessibility settings menu.</string>
+    <string name="soonar_is_active">SONAAR is already active.</string>
     <string name="go_to_accessibility_settings">Go to accessibility settings</string>
     <string name="image_not_found">SONAAR was not able to find an image.</string>
     <string name="show_more">Show more</string>
@@ -42,4 +43,5 @@
     <string name="see_more">See more</string>
     <string name="copy_clipboard">Copy to clipboard</string>
     <string name="click_on_one_item_to_copy_it_to_the_clipboard">Click on one item to copy it to the clipboard</string>
+    <string name="alt_text_by_sonaar">Alt text by sonaar:</string>
 </resources>

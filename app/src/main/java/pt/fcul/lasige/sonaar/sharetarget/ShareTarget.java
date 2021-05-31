@@ -109,7 +109,8 @@ public class ShareTarget extends AppCompatActivity implements View.OnClickListen
                                             activity.runOnUiThread(() -> alt.setText(String.format(getString(R.string.notification_text_alt_not_found_none), concepts)));
                                         }
                                     },
-                                    MessageHandler.SOCIAL_NETWORK.NONE);
+                                    MessageHandler.SOCIAL_NETWORK.NONE,
+                                    "consumption");
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -129,6 +130,7 @@ public class ShareTarget extends AppCompatActivity implements View.OnClickListen
                 });
 
             }else if (type.startsWith("text/")) {
+                Log.d("GET", "GET");
                 String text = intent.getStringExtra(Intent.EXTRA_TEXT);
                 if (text != null) {
                     new Thread(() -> {

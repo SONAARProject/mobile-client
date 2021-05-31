@@ -2,13 +2,8 @@ package pt.fcul.lasige.sonaar.api;
 
 import android.util.Log;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
-import pt.fcul.lasige.sonaar.Controller;
 import pt.fcul.lasige.sonaar.notifications.NotificationController;
 import pt.fcul.lasige.sonaar.api.pojo.Message;
 import pt.fcul.lasige.sonaar.data.Constants;
