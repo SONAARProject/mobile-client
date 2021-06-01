@@ -44,4 +44,8 @@
     <string name="copy_clipboard">Copy to clipboard</string>
     <string name="click_on_one_item_to_copy_it_to_the_clipboard">Click on one item to copy it to the clipboard</string>
     <string name="alt_text_by_sonaar">Alt text by sonaar:</string>
+    <string name="read_doc">Read documentation</string>
+    <string name="doc_url">http://www.di.fc.ul.pt/~cad/SONAAR/documentation/doc.html</string>
+    <string name="the_screenshot_will_be_taken_in">The screenshot will be taken in:</string>
+    <string name="sending_information_to_sonaar">Sending information to sonaar...</string>
 </resources>

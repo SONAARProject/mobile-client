@@ -1,5 +1,7 @@
 package pt.fcul.lasige.sonaar.api.pojo;
 
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONArray;
@@ -29,13 +31,12 @@ public class Message {
         if (this.alts != null){
             try {
                 JSONArray array = new JSONArray(this.alts);
-                ArrayList<java.lang.String> alts = new ArrayList<java.lang.String>();
 
                 for (int i=0;i<array.length();i++){
                     JSONObject jsonObject = array.getJSONObject(i);
-                    alts.add(jsonObject.getString("AltText"));
+                    altsList.add(jsonObject.getString("AltText"));
                 }
-                Controller.getInstance().setSonaarAltText(alts.get(0));
+                Controller.getInstance().setSonaarAltText(altsList.get(0));
 
             } catch (JSONException e) {
                 e.printStackTrace();

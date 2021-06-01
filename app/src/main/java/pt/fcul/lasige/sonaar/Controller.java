@@ -2,6 +2,7 @@ package pt.fcul.lasige.sonaar;
 
 import android.accessibilityservice.AccessibilityService;
 import android.graphics.Rect;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -194,35 +195,58 @@ public class Controller {
 
         startScreenshotCoolDown();
 
+        Overlay.getInstance().showScreensShotCountDown(3);
         // hide the soft keyboard if is showing
         AccessibilityServiceUtils.hideKeyboard(service);
-        new Handler().postDelayed(() -> {
-            //give time to the keyboard disappear
-            //and take the screenshot
-            AccessibilityServiceUtils.takeScreenshot(service);
 
-            // activate back the keyboard
-            AccessibilityServiceUtils.showKeyboard(service);
-        }, 1000);
-        new Handler().postDelayed(() -> {
+        new CountDownTimer(1500, 500) {
 
-            //give time to the screenshot to be written to disk
-            //crop the image and send the encoded image to our backend
-            //for searching an alt text
-            currentImage = ImageUtils.getImageToAPI(
-                    service,
-                    bitMapCutoutX,
-                    bitMapCutoutY,
-                    bitMapCutoutWidth,
-                    bitMapCutoutHeight);
+            public void onTick(long millisUntilFinished) {
+                Overlay.getInstance().updateScreensShotCountDown();
+            }
 
-            APIClient.searchImageFile(
-                    currentImage,
-                    messageHandler,
-                    socialNetwork,
-                    "authoring");
+            public void onFinish() {
+                Overlay.getInstance().removeScreensShotCountDown();
+                new Handler().postDelayed(() -> {
+                    //give time to the keyboard disappear
+                    //and take the screenshot
+                    AccessibilityServiceUtils.takeScreenshot(service);
 
-        }, 5000);
+                    // activate back the keyboard
+                    AccessibilityServiceUtils.showKeyboard(service);
+
+                    Overlay.getInstance().showApiCall();
+                    new CountDownTimer(5000, 1000) {
+
+                        public void onTick(long millisUntilFinished) {
+                        }
+
+                        public void onFinish() {
+                            Overlay.getInstance().removeApiCall();
+                            //give time to the screenshot to be written to disk
+                            //crop the image and send the encoded image to our backend
+                            //for searching an alt text
+                            currentImage = ImageUtils.getImageToAPI(
+                                    service,
+                                    bitMapCutoutX,
+                                    bitMapCutoutY,
+                                    bitMapCutoutWidth,
+                                    bitMapCutoutHeight);
+
+                            APIClient.searchImageFile(
+                                    currentImage,
+                                    messageHandler,
+                                    socialNetwork,
+                                    "authoring");
+                        }
+
+                    }.start();
+
+                }, 150);
+            }
+
+        }.start();
+
     }
 
     private void takeScreenshotNoSend(int bitMapCutoutX, int bitMapCutoutY, int bitMapCutoutWidth, int bitMapCutoutHeight){
@@ -232,29 +256,51 @@ public class Controller {
 
         startScreenshotCoolDown();
 
+        Overlay.getInstance().showScreensShotCountDown(3);
         // hide the soft keyboard if is showing
         AccessibilityServiceUtils.hideKeyboard(service);
-        new Handler().postDelayed(() -> {
-            //give time to the keyboard disappear
-            //and take the screenshot
-            AccessibilityServiceUtils.takeScreenshot(service);
 
-            // activate back the keyboard
-            AccessibilityServiceUtils.showKeyboard(service);
-        }, 1000);
-        new Handler().postDelayed(() -> {
+        new CountDownTimer(1500, 500) {
 
-            //give time to the screenshot to be written to disk
-            //crop the image and send the encoded image to our backend
-            //for searching an alt text
-            currentImage = ImageUtils.getImageToAPI(
-                    service,
-                    bitMapCutoutX,
-                    bitMapCutoutY,
-                    bitMapCutoutWidth,
-                    bitMapCutoutHeight);
+            public void onTick(long millisUntilFinished) {
+                Overlay.getInstance().updateScreensShotCountDown();
+            }
 
-        }, 5000);
+            public void onFinish() {
+                Overlay.getInstance().removeScreensShotCountDown();
+                new Handler().postDelayed(() -> {
+                    //give time to the keyboard disappear
+                    //and take the screenshot
+                    AccessibilityServiceUtils.takeScreenshot(service);
+
+                    // activate back the keyboard
+                    AccessibilityServiceUtils.showKeyboard(service);
+
+                    Overlay.getInstance().showApiCall();
+                    new CountDownTimer(5000, 1000) {
+
+                        public void onTick(long millisUntilFinished) {
+                        }
+
+                        public void onFinish() {
+                            Overlay.getInstance().removeApiCall();
+                            //give time to the screenshot to be written to disk
+                            //crop the image and send the encoded image to our backend
+                            //for searching an alt text
+                            currentImage = ImageUtils.getImageToAPI(
+                                    service,
+                                    bitMapCutoutX,
+                                    bitMapCutoutY,
+                                    bitMapCutoutWidth,
+                                    bitMapCutoutHeight);
+                        }
+
+                    }.start();
+                }, 500);
+            }
+
+        }.start();
+
     }
 
     private void cleanVariables() {

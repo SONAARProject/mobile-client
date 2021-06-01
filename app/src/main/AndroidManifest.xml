@@ -17,7 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Sonaar">
-        <activity android:name=".ReportProblemForm"></activity>
+        <activity android:name=".ReportProblemForm"/>
         <activity android:name=".sharetarget.ShareTarget">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -65,6 +65,9 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
+        <service
+            android:name=".notifications.NotificationActionsService"
+            android:exported="false"/>
     </application>
 
 </manifest>

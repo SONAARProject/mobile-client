@@ -130,7 +130,6 @@ public class ShareTarget extends AppCompatActivity implements View.OnClickListen
                 });
 
             }else if (type.startsWith("text/")) {
-                Log.d("GET", "GET");
                 String text = intent.getStringExtra(Intent.EXTRA_TEXT);
                 if (text != null) {
                     new Thread(() -> {

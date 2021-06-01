@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.service.notification.StatusBarNotification;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
@@ -59,6 +60,7 @@ public class NotificationController {
                     text = String.format(context.getString(R.string.notification_text_none), altsList.get(0));
                 break;
         }
+
 
         if(altsList.size() > 0) {
             Intent iAction1 = new Intent(context, NotificationActionsService.class);

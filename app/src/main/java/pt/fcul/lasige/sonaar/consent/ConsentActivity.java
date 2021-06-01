@@ -9,8 +9,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 
 import org.jetbrains.annotations.NotNull;
@@ -80,6 +83,12 @@ public class ConsentActivity extends AppCompatActivity {
                         .setReorderingAllowed(true)
                         .commit();
                 btNext.setText(R.string.start);
+                findViewById(R.id.bt_read_doc).setVisibility(View.VISIBLE);
+                findViewById(R.id.bt_read_doc).setOnClickListener(v -> {
+                    Uri uri = Uri.parse(getString(R.string.doc_url));
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                });
                 setResult(Activity.RESULT_OK, returnIntent);
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = prefs.edit();
@@ -100,5 +109,11 @@ public class ConsentActivity extends AppCompatActivity {
         }
         // Other 'case' lines to check for other
         // permissions this app might request.
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

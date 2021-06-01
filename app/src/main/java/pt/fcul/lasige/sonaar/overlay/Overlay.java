@@ -71,9 +71,34 @@ public class Overlay implements View.OnClickListener{
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(service);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        params.gravity = Gravity.TOP | Gravity.END;
+        params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
         params.height = 1000;
         addView(rootViewGroup, params);
+    }
+
+    public void showScreensShotCountDown(int i){
+        rootViewGroup = (ViewGroup) li.inflate(R.layout.screenshot_countdown, null);
+        TextView tv = rootViewGroup.findViewById(R.id.tv_countdown_time);
+        tv.setText(String.valueOf(i));
+        params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+        addView(rootViewGroup, params);
+    }
+
+    public void removeScreensShotCountDown() {
+        if(rootViewGroup != null)
+            removeView(rootViewGroup);
+    }
+
+    public void showApiCall(){
+        rootViewGroup = (ViewGroup) li.inflate(R.layout.api_call, null);
+
+        params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+        addView(rootViewGroup, params);
+    }
+
+    public void removeApiCall() {
+        if(rootViewGroup != null)
+            removeView(rootViewGroup);
     }
 
     public void hideAltTextList(){
@@ -100,5 +125,10 @@ public class Overlay implements View.OnClickListener{
         clipboard.setPrimaryClip(clip);
         Controller.getInstance().setSonaarAltText(((TextView) v).getText().toString());
         hideAltTextList();
+    }
+
+    public void updateScreensShotCountDown() {
+        TextView tv = rootViewGroup.findViewById(R.id.tv_countdown_time);
+        tv.setText(String.valueOf(Integer.parseInt(tv.getText().toString()) - 1));
     }
 }
