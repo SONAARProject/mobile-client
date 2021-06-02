@@ -46,5 +46,5 @@
     <string name="read_doc">Ler documentação</string>
     <string name="doc_url">http://www.di.fc.ul.pt/~cad/SONAAR/pt/documentation/doc.html</string>
     <string name="the_screenshot_will_be_taken_in">A capturar o ecra em:</string>
-    <string name="sending_information_to_sonaar">A enviar a informação para o sonaar…</string>
+    <string name="sending_information_to_sonaar">A procurar textos alternativos no sonaar…</string>
 </resources>

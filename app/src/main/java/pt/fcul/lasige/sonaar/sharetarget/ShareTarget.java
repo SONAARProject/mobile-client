@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,6 +74,9 @@ public class ShareTarget extends AppCompatActivity implements View.OnClickListen
 
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if (type.startsWith("image/")) {
+                ProgressDialog pd = new ProgressDialog(ShareTarget.this);
+                pd.setMessage(getString(R.string.sending_information_to_sonaar));
+                pd.show();
                 Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
                 if (imageUri != null) {
                     new Thread(() -> {
@@ -83,6 +88,7 @@ public class ShareTarget extends AppCompatActivity implements View.OnClickListen
                             APIClient.searchImageFile(
                                     bos.toByteArray(),
                                     (message, socialNetwork) -> {
+                                        pd.dismiss();
                                         if (message.alts != null){
                                             try {
                                                 JSONArray array = new JSONArray(message.alts);
@@ -130,6 +136,9 @@ public class ShareTarget extends AppCompatActivity implements View.OnClickListen
                 });
 
             }else if (type.startsWith("text/")) {
+                ProgressDialog pd = new ProgressDialog(ShareTarget.this);
+                pd.setMessage(getString(R.string.sending_information_to_sonaar));
+                pd.show();
                 String text = intent.getStringExtra(Intent.EXTRA_TEXT);
                 if (text != null) {
                     new Thread(() -> {
@@ -142,6 +151,7 @@ public class ShareTarget extends AppCompatActivity implements View.OnClickListen
                                 APIClient.searchImageUrl(
                                         text,
                                         (message, socialNetwork) -> {
+                                            pd.dismiss();
                                             ArrayList<String> altsList = message.getAltsList();
                                             ArrayList<String> conceptsList = message.getConceptsList();
                                             ArrayList<String> textList = message.getTextList();
