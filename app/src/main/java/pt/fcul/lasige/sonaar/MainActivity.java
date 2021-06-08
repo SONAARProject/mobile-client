@@ -1,14 +1,18 @@
 package pt.fcul.lasige.sonaar;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,13 +20,19 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import org.jetbrains.annotations.NotNull;
 
 import pt.fcul.lasige.sonaar.accessibleservice.AccessibilityServiceClass;
 import pt.fcul.lasige.sonaar.consent.ConsentActivity;
+import pt.fcul.lasige.sonaar.consent.ConsentPage4;
+import pt.fcul.lasige.sonaar.consent.ConsentPage5;
 import pt.fcul.lasige.sonaar.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -90,20 +100,54 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(getApplicationContext(), ConsentActivity.class);
             startActivityForResult(i, 1904);
         }else {
-            setContentView(R.layout.activity_main);
-            TextView title = findViewById(R.id.tv_title);
-            Button start = findViewById(R.id.bt_open_settings);
-            if(!isMyServiceRunning(AccessibilityServiceClass.class)){
+            if (ContextCompat.checkSelfPermission(
+                    this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                    PackageManager.PERMISSION_GRANTED) {
+                setContentView(R.layout.activity_main);
+                TextView title = findViewById(R.id.tv_title);
+                Button start = findViewById(R.id.bt_open_settings);
+                if(!isMyServiceRunning(AccessibilityServiceClass.class)){
 
-                title.setText(R.string.please_activate_the_sonaar_service_on_the_accessibility_settings_menu);
-                start.setVisibility(View.VISIBLE);
-                start.setOnClickListener(v -> startActivity(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS)));
+                    title.setText(R.string.please_activate_the_sonaar_service_on_the_accessibility_settings_menu);
+                    start.setVisibility(View.VISIBLE);
+                    start.setOnClickListener(v -> startActivity(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS)));
 
-            }else{
-                title.setText(R.string.soonar_is_active);
-                start.setVisibility(View.GONE);
+                }else{
+                    title.setText(R.string.soonar_is_active);
+                    start.setVisibility(View.GONE);
+                }
+            } else {
+                setContentView(R.layout.activity_main_request_storage_permission);
+                findViewById(R.id.bt_open_settings).setOnClickListener(view -> {
+                    requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, 1904);
+                });
             }
-
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions,
+                                           @NotNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1904) {
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                setContentView(R.layout.activity_main);
+                TextView title = findViewById(R.id.tv_title);
+                Button start = findViewById(R.id.bt_open_settings);
+                if(!isMyServiceRunning(AccessibilityServiceClass.class)){
+                    title.setText(R.string.please_activate_the_sonaar_service_on_the_accessibility_settings_menu);
+                    start.setVisibility(View.VISIBLE);
+                    start.setOnClickListener(v -> startActivity(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS)));
+                }else{
+                    title.setText(R.string.soonar_is_active);
+                    start.setVisibility(View.GONE);
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), getString(R.string.permission_refuse), Toast.LENGTH_SHORT).show();
+            }
+        }
+        // Other 'case' lines to check for other
+        // permissions this app might request.
     }
 }

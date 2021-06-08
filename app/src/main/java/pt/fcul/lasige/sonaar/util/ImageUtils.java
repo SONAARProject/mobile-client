@@ -19,6 +19,9 @@ import pt.fcul.lasige.sonaar.data.Constants;
 public class ImageUtils {
     public static byte[] getImageToAPI(Context ctx, int bitMapCutoutX, int bitMapCutoutY, int bitMapCutoutWidth, int bitMapCutoutHeight){
         File screenshot = getLastScreenshot(ctx);
+        if (screenshot == null)
+            return null;
+
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;

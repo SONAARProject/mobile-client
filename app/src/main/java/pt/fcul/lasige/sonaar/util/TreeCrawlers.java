@@ -74,7 +74,10 @@ public class TreeCrawlers {
 
         if (node.getViewIdResourceName() != null) {
             if (node.getViewIdResourceName().equals("com.twitter.android:id/media_attachments")) {
-                node.getChild(0).getChild(0).getBoundsInScreen(imageBound);
+                if ( node.getChild(0).getChild(0) == null)
+                    node.getChild(0).getBoundsInScreen(imageBound);
+                else
+                    node.getChild(0).getChild(0).getBoundsInScreen(imageBound);
                 counter.incPost();
             }else if (node.getViewIdResourceName().equals("com.twitter.android:id/composer_add_tweet")) {
                 counter.incPost();
@@ -163,7 +166,7 @@ public class TreeCrawlers {
             ){
                 Bundle arguments = new Bundle();
                 arguments.putCharSequence(AccessibilityNodeInfo
-                        .ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, Controller.getInstance().getString(R.string.alt_text_by_sonaar) + " " + Controller.getInstance().getSonaarAltText());
+                        .ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, Controller.getInstance().getSonaarAltText() + " " + Controller.getInstance().getString(R.string.alt_text_by_sonaar));
                 node.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, arguments);
                 Controller.getInstance().setCanISetAltText(false);
             }
@@ -189,7 +192,7 @@ public class TreeCrawlers {
                 ){
                     Bundle arguments = new Bundle();
                     arguments.putCharSequence(AccessibilityNodeInfo
-                            .ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, Controller.getInstance().getString(R.string.alt_text_by_sonaar) + " " + Controller.getInstance().getSonaarAltText());
+                            .ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, Controller.getInstance().getSonaarAltText() + " " + Controller.getInstance().getString(R.string.alt_text_by_sonaar));
                     node.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, arguments);
                     Controller.getInstance().setCanISetAltText(false);
                 }

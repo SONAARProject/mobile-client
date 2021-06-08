@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -69,6 +70,9 @@ public class Overlay implements View.OnClickListener{
         RecyclerView mRecyclerView = (RecyclerView) rootViewGroup.findViewById(R.id.rv_alt_text_list);
         AltTextListAdapter mAdapter = new AltTextListAdapter(this, altTextList);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(service);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
+                mLayoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;

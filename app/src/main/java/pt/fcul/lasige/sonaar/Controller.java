@@ -6,6 +6,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.Toast;
 
 import pt.fcul.lasige.sonaar.api.APIClient;
 import pt.fcul.lasige.sonaar.api.MessageHandler;
@@ -233,11 +234,15 @@ public class Controller {
                                     bitMapCutoutWidth,
                                     bitMapCutoutHeight);
 
-                            APIClient.searchImageFile(
-                                    currentImage,
-                                    messageHandler,
-                                    socialNetwork,
-                                    "authoring");
+                            if (currentImage == null){
+                                Toast.makeText(service, service.getString(R.string.error_read_screenshot), Toast.LENGTH_SHORT).show();
+                            }else {
+                                APIClient.searchImageFile(
+                                        currentImage,
+                                        messageHandler,
+                                        socialNetwork,
+                                        "authoring");
+                            }
                         }
 
                     }.start();

@@ -67,7 +67,8 @@ public class Message {
                 JSONObject jsonObject = new JSONObject(this.text);
                 JSONArray phrases = jsonObject.getJSONArray("phrases");
                 for (int i = 0; i < phrases.length(); i++) {
-                    textList.add(phrases.getString(i));
+                    if(!phrases.getString(i).toLowerCase().contains("+alt"))
+                        textList.add(phrases.getString(i));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

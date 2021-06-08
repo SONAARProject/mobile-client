@@ -76,6 +76,7 @@ public class ShareTarget extends AppCompatActivity implements View.OnClickListen
             if (type.startsWith("image/")) {
                 ProgressDialog pd = new ProgressDialog(ShareTarget.this);
                 pd.setMessage(getString(R.string.sending_information_to_sonaar));
+                pd.setCancelable(false);
                 pd.show();
                 Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
                 if (imageUri != null) {
@@ -138,6 +139,7 @@ public class ShareTarget extends AppCompatActivity implements View.OnClickListen
             }else if (type.startsWith("text/")) {
                 ProgressDialog pd = new ProgressDialog(ShareTarget.this);
                 pd.setMessage(getString(R.string.sending_information_to_sonaar));
+                pd.setCancelable(false);
                 pd.show();
                 String text = intent.getStringExtra(Intent.EXTRA_TEXT);
                 if (text != null) {

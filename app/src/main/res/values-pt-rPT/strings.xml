@@ -42,9 +42,12 @@
     <string name="see_more">Ver mais</string>
     <string name="copy_clipboard">Copiar para o clipboard</string>
     <string name="click_on_one_item_to_copy_it_to_the_clipboard">Clique no item para o copiar para o clipboard</string>
-    <string name="alt_text_by_sonaar">Texto alternativo por sonaar:</string>
+    <string name="alt_text_by_sonaar">texto alternativo gerado por sonaar</string>
     <string name="read_doc">Ler documentação</string>
     <string name="doc_url">http://www.di.fc.ul.pt/~cad/SONAAR/pt/documentation/doc.html</string>
     <string name="the_screenshot_will_be_taken_in">A capturar o ecra em:</string>
     <string name="sending_information_to_sonaar">A procurar textos alternativos no sonaar…</string>
+    <string name="error_read_screenshot">Sonnar não conseguir aceder à captura de ecra</string>
+    <string name="launch_permission_dialog">Abrir caixa de diálogo de permissões</string>
+    <string name="permission_refuse">Permissão recusada, tem que dar perssiões de armazenamento no menu de infromações da aplicação</string>
 </resources>
