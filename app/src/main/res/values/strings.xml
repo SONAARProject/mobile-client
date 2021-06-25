@@ -13,6 +13,7 @@
     <string name="page_2_text_2">To be able to achieve this, SONAAR needs to take a screenshot of your phone, crop it to the image size and send it to our server. There we search for the image. If we already have it we don\'t even store it, but we will be able to send you any descriptions we have stored. If we don\'t have it, we store it, generate a description and send it to you. When you complete your post or tweet we store any description you created so that it can help other users in the future.</string>
     <string name="page_2_text_3">By clicking \"I Accept\", you are agreeing with this collection</string>
     <string name="consent" translatable="false">consent</string>
+    <string name="uuid" translatable="false">uuid</string>
     <string name="title_activity_settings">Settings</string>
     <string name="settings">Settings</string>
     <string name="notification_text">SONAAR detected that you are posting a image to %1$s. A possible altText to your image is: %2$s. Please consider add it to your image post. %3$s</string>
@@ -51,4 +52,6 @@
     <string name="error_read_screenshot">Sonnar could not read the screenshot</string>
     <string name="launch_permission_dialog">Launch permission dialog</string>
     <string name="permission_refuse">Permission refused, you have to allow the storage permission on app info menu</string>
+    <string name="study_1"><![CDATA[We are looking for participants in a <a href="http://www.di.fc.ul.pt/~cad/SONAAR/recruitment.html">study</a> to help us improve SONAAR and the quality of image descriptions on the internet.]]></string>
+    <string name="study_2"><![CDATA[If you wish to participate please <a href="https://forms.office.com/pages/responsepage.aspx?id=AIX6C_KxZkW68W9ZNwiT5yY5gSqckrxFolbQyc5XHrFUNDU2M0gwMEJGWDhWSzZRRFFEODNYODJCQS4u">fill out this form</a>]]></string>
 </resources>

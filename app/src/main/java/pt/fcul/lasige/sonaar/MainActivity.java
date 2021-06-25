@@ -12,6 +12,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +31,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 import pt.fcul.lasige.sonaar.accessibleservice.AccessibilityServiceClass;
 import pt.fcul.lasige.sonaar.consent.ConsentActivity;
@@ -54,6 +59,15 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1904){
             if(resultCode == Activity.RESULT_OK){
                 setContentView(R.layout.activity_main);
+                TextView t1, t2;
+                t1 = findViewById(R.id.tv_study_1);
+                t2 = findViewById(R.id.tv_study_2);
+                t1.setText(Html.fromHtml(getString(R.string.study_1)));
+                t2.setText(Html.fromHtml(getString(R.string.study_2)));
+                Linkify.addLinks(t1, Linkify.ALL);
+                Linkify.addLinks(t2, Linkify.ALL);
+                t1.setMovementMethod(LinkMovementMethod.getInstance());
+                t2.setMovementMethod(LinkMovementMethod.getInstance());
                 findViewById(R.id.bt_open_settings).setOnClickListener(v -> startActivity(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS)));
             }else {
                 finish();
@@ -95,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean consent = prefs.getBoolean(getString(R.string.consent), false);
+        String uuid = prefs.getString(getString(R.string.uuid), "null");
 
         if(!consent){
             Intent i = new Intent(getApplicationContext(), ConsentActivity.class);
@@ -104,18 +119,33 @@ public class MainActivity extends AppCompatActivity {
                     this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                     PackageManager.PERMISSION_GRANTED) {
                 setContentView(R.layout.activity_main);
+                TextView t1, t2;
+                t1 = findViewById(R.id.tv_study_1);
+                t2 = findViewById(R.id.tv_study_2);
+                t1.setText(Html.fromHtml(getString(R.string.study_1)));
+                t2.setText(Html.fromHtml(getString(R.string.study_2)));
+                Linkify.addLinks(t1, Linkify.ALL);
+                Linkify.addLinks(t2, Linkify.ALL);
+                t1.setMovementMethod(LinkMovementMethod.getInstance());
+                t2.setMovementMethod(LinkMovementMethod.getInstance());
                 TextView title = findViewById(R.id.tv_title);
                 Button start = findViewById(R.id.bt_open_settings);
                 if(!isMyServiceRunning(AccessibilityServiceClass.class)){
-
                     title.setText(R.string.please_activate_the_sonaar_service_on_the_accessibility_settings_menu);
                     start.setVisibility(View.VISIBLE);
                     start.setOnClickListener(v -> startActivity(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS)));
-
                 }else{
                     title.setText(R.string.soonar_is_active);
                     start.setVisibility(View.GONE);
                 }
+
+                if (uuid.equals("null")) {
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString(getString(R.string.uuid), UUID.randomUUID().toString());
+                    editor.apply();
+                }
+
+
             } else {
                 setContentView(R.layout.activity_main_request_storage_permission);
                 findViewById(R.id.bt_open_settings).setOnClickListener(view -> {
@@ -133,6 +163,15 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 setContentView(R.layout.activity_main);
+                TextView t1, t2;
+                t1 = findViewById(R.id.tv_study_1);
+                t2 = findViewById(R.id.tv_study_2);
+                t1.setText(Html.fromHtml(getString(R.string.study_1)));
+                t2.setText(Html.fromHtml(getString(R.string.study_2)));
+                Linkify.addLinks(t1, Linkify.ALL);
+                Linkify.addLinks(t2, Linkify.ALL);
+                t1.setMovementMethod(LinkMovementMethod.getInstance());
+                t2.setMovementMethod(LinkMovementMethod.getInstance());
                 TextView title = findViewById(R.id.tv_title);
                 Button start = findViewById(R.id.bt_open_settings);
                 if(!isMyServiceRunning(AccessibilityServiceClass.class)){

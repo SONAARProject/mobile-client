@@ -18,6 +18,8 @@ import android.widget.Button;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
 import pt.fcul.lasige.sonaar.R;
 
 public class ConsentActivity extends AppCompatActivity {
@@ -93,6 +95,7 @@ public class ConsentActivity extends AppCompatActivity {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putBoolean(getString(R.string.consent), true);
+//                editor.putString(getString(R.string.uuid), UUID.randomUUID().toString());
                 editor.apply();
             } else {
                 fragmentManager.beginTransaction()
