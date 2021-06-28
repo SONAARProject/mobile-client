@@ -95,7 +95,6 @@ public class ConsentActivity extends AppCompatActivity {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putBoolean(getString(R.string.consent), true);
-//                editor.putString(getString(R.string.uuid), UUID.randomUUID().toString());
                 editor.apply();
             } else {
                 fragmentManager.beginTransaction()

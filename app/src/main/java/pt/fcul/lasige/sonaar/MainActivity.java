@@ -145,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
                     editor.apply();
                 }
 
-
             } else {
                 setContentView(R.layout.activity_main_request_storage_permission);
                 findViewById(R.id.bt_open_settings).setOnClickListener(view -> {

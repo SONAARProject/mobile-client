@@ -12,7 +12,16 @@ public class MessageHandler implements IMessageHandler {
 
     private NotificationController notificationController;
 
-    public enum SOCIAL_NETWORK{TWITTER, FACEBOOK, INSTAGRAM, NONE}
+    public enum SOCIAL_NETWORK{TWITTER, FACEBOOK, INSTAGRAM, NONE;
+        @Override
+        public String toString() {
+            switch(this) {
+                case TWITTER: return "twitter";
+                case FACEBOOK: return "facebook";
+                case NONE: return "none";
+                default: throw new IllegalArgumentException();
+            }
+        }}
 
     public MessageHandler(NotificationController notificationController) {
         this.notificationController = notificationController;

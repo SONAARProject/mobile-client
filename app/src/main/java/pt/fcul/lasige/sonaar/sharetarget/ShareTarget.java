@@ -11,9 +11,11 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -53,6 +55,9 @@ public class ShareTarget extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_share_target);
         activity = this;
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String uuid = prefs.getString(getString(R.string.uuid), "null");
+
         // Get intent, action and MIME type
         Intent intent = getIntent();
         String action = intent.getAction();
@@ -86,7 +91,7 @@ public class ShareTarget extends AppCompatActivity implements View.OnClickListen
                             activity.runOnUiThread(() -> Glide.with(getApplicationContext()).load(bitmap).into(iv));
                             ByteArrayOutputStream bos = new ByteArrayOutputStream();
                             bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
-                            APIClient.searchImageFile(
+                           APIClient.searchImageFile(
                                     bos.toByteArray(),
                                     (message, socialNetwork) -> {
                                         pd.dismiss();
@@ -117,7 +122,8 @@ public class ShareTarget extends AppCompatActivity implements View.OnClickListen
                                         }
                                     },
                                     MessageHandler.SOCIAL_NETWORK.NONE,
-                                    "consumption");
+                                    "consumption",
+                                    uuid);
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -169,7 +175,8 @@ public class ShareTarget extends AppCompatActivity implements View.OnClickListen
                                                 activity.runOnUiThread(() -> alt.setText(String.format(getString(R.string.notification_text_alt_not_found_none), String.join(", ", conceptsList.subList(0, 3)))));
                                             }
                                         },
-                                        MessageHandler.SOCIAL_NETWORK.NONE);
+                                        MessageHandler.SOCIAL_NETWORK.NONE,
+                                        uuid);
                             }
                         } catch (Exception e) {
                             activity.runOnUiThread(() -> alt.setText(R.string.image_not_found));

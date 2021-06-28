@@ -1,9 +1,11 @@
 package pt.fcul.lasige.sonaar;
 
 import android.accessibilityservice.AccessibilityService;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
@@ -56,7 +58,7 @@ public class Controller {
     }
 
     public void setUserAltText(String userAltText) {
-        this.userAltText = userAltText;
+        this.userAltText = userAltText.replace(getString(R.string.alt_text_by_sonaar), "").trim();
     }
 
     public void setCanISetAltText(boolean canISetAltText) {
@@ -84,11 +86,14 @@ public class Controller {
                 source.getPackageName() == null)
             return;
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(service.getApplicationContext());
+        String uuid = prefs.getString(getString(R.string.uuid), "null");
+
         switch (source.getPackageName().toString()){
             case Constants.FACEBOOK_PACKAGE:
                 if(source.getClassName().toString().contains("android.widget.Button") && (source.getContentDescription().toString().equals("Guardar") || source.getContentDescription().toString().equals("Save"))){
                     if(userAltText != null && !userAltText.equals(sonaarAltText) && currentImage != null) {
-                        APIClient.insertImageAndAltText(currentImage, userAltText, "");
+                        APIClient.insertImageAndAltText(currentImage, userAltText, "", MessageHandler.SOCIAL_NETWORK.FACEBOOK, uuid);
                     }
                     cleanVariables();
                 }
@@ -101,7 +106,7 @@ public class Controller {
                     return;
                 if(source.getClassName().equals("android.widget.Button") && source.getText().equals("TWEET")){
                     if(userAltText != null && !userAltText.equals(sonaarAltText) && currentImage != null) {
-                        APIClient.insertImageAndAltText(currentImage, userAltText, postText);
+                        APIClient.insertImageAndAltText(currentImage, userAltText, postText, MessageHandler.SOCIAL_NETWORK.TWITTER, uuid);
                     }
                     cleanVariables();
                 }
@@ -217,7 +222,7 @@ public class Controller {
                     AccessibilityServiceUtils.showKeyboard(service);
 
                     Overlay.getInstance().showApiCall();
-                    new CountDownTimer(5000, 1000) {
+                    new CountDownTimer(7500, 1000) {
 
                         public void onTick(long millisUntilFinished) {
                         }
@@ -237,17 +242,20 @@ public class Controller {
                             if (currentImage == null){
                                 Toast.makeText(service, service.getString(R.string.error_read_screenshot), Toast.LENGTH_SHORT).show();
                             }else {
+                                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(service.getApplicationContext());
+                                String uuid = prefs.getString(getString(R.string.uuid), "null");
                                 APIClient.searchImageFile(
                                         currentImage,
                                         messageHandler,
                                         socialNetwork,
-                                        "authoring");
+                                        "suggestion",
+                                        uuid);
                             }
                         }
 
                     }.start();
 
-                }, 150);
+                }, 1500);
             }
 
         }.start();

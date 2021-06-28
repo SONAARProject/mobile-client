@@ -10,19 +10,39 @@ import retrofit2.http.Path;
 
 public interface APIInterface {
 
-    @GET("search/{lang}/{url}/")
-    Call<Message> searchImageUrl(@Path("url") String url, @Path("lang") String lang);
+    @FormUrlEncoded
+    @POST("search/")
+    Call<Message> searchImageUrl(@Field("imageUrl") String imageBase64,
+                                 @Field("lang") String lang,
+                                 @Field("type") String type,
+                                 @Field("platform") String platform,
+                                 @Field("userId") String userId);
 
     @FormUrlEncoded
     @POST("search/")
     Call<Message> searchImageBinary(@Field("imageBase64") String imageBase64,
                                     @Field("lang") String lang,
-                                    @Field("type") String type);
+                                    @Field("type") String type,
+                                    @Field("platform") String platform,
+                                    @Field("socialMedia") String socialMedia,
+                                    @Field("userId") String userId);
+
+    @FormUrlEncoded
+    @POST("search/")
+    Call<Message> searchImageBinary(@Field("imageBase64") String imageBase64,
+                                    @Field("lang") String lang,
+                                    @Field("type") String type,
+                                    @Field("platform") String platform,
+                                    @Field("userId") String userId);
 
     @FormUrlEncoded
     @POST("insertBase64/")
     Call<Message> insertBase64(@Field("imageBase64") String imageBase64,
+                               @Field("type") String type,
                                @Field("altText") String altText,
                                @Field("postText") String postText,
-                               @Field("lang") String lang);
+                               @Field("lang") String lang,
+                               @Field("userId") String userId,
+                               @Field("platform") String platform,
+                               @Field("socialMedia") String socialMedia);
 }

@@ -40,10 +40,10 @@ public class SettingsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
-        ((TextView) findViewById(R.id.tv_version)).setText(BuildConfig.VERSION_NAME);
+        ((TextView) findViewById(R.id.tv_version)).setText("Version: " + BuildConfig.VERSION_NAME);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String uuid = prefs.getString(getString(R.string.uuid), "null");
-        ((TextView) findViewById(R.id.tv_uuid)).setText(uuid);
+        ((TextView) findViewById(R.id.tv_uuid)).setText("ID: " + uuid);
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
