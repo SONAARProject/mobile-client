@@ -23,10 +23,10 @@
             />
 
     </PreferenceCategory>
-    <PreferenceCategory app:title="@string/help_us_improve">
-        <Preference
-            android:key="report_problem"
-            android:title="@string/report_problem" />
-    </PreferenceCategory>
+<!--    <PreferenceCategory app:title="@string/help_us_improve">-->
+<!--        <Preference-->
+<!--            android:key="report_problem"-->
+<!--            android:title="@string/report_problem" />-->
+<!--    </PreferenceCategory>-->
 
 </PreferenceScreen>

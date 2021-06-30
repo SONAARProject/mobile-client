@@ -26,7 +26,7 @@ public class TreeCrawlers {
                 counter.incPost();
             } else if (node.getContentDescription().toString().equals("Tap to edit your photo") || node.getContentDescription().toString().equals("Toca para editares a tua foto")) {
                 counter.incPost();
-            } else if (node.getContentDescription().toString().equals("Cancel Photo") || node.getContentDescription().toString().equals("Remover foto")) {
+            } else if (node.getContentDescription().toString().equals("Remove Photo") || node.getContentDescription().toString().equals("Remover foto")) {
                 counter.incPost();
             } else if (node.getContentDescription().toString().equals("Add to your post") || node.getContentDescription().toString().equals("Adicionar à tua publicação")) {
                 counter.incPost();
@@ -39,25 +39,20 @@ public class TreeCrawlers {
             } else if (node.getContentDescription().toString().equals("Room")) {
                 counter.incFeed();
             }else if (node.getContentDescription().toString().equals("Edit Alt Text") || node.getContentDescription().toString().equals("Editar o texto alternativo")) {
-
                 counter.incAltText();
             }else if (node.getContentDescription().toString().equals("Add alternative text that describes the contents of the photo for people with visual impairments.") || node.getContentDescription().toString().equals("Adiciona texto alternativo que descreva os conteúdos da foto para pessoas com deficiência visual.")) {
-
                 counter.incAltText();
             }else if (node.getContentDescription().toString().equals("Save") || node.getContentDescription().toString().equals("Guardar")) {
-
                 counter.incAltText();
             }
         }
 
         if (node.getText() != null) {
-
             if (node.getText().toString().contains("Say something about this photo") || node.getText().toString().contains("Diz algo sobre esta foto")) {
                 counter.incPost();
             } else if (node.getText().toString().equals("Create Post") || node.getText().toString().equals("Criar publicação")) {
                 counter.incPost();
             }else if (node.getText().toString().contains("Write photo alternative text") || node.getText().toString().contains("Escreve o texto alternativo da foto")) {
-
                 counter.incAltText();
             }
         }

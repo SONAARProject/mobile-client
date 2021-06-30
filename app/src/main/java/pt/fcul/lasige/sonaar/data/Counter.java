@@ -35,4 +35,12 @@ public class Counter {
         return altText;
     }
 
+    @Override
+    public String toString() {
+        return "Counter{" +
+                "post=" + post +
+                ", feed=" + feed +
+                ", altText=" + altText +
+                '}';
+    }
 }

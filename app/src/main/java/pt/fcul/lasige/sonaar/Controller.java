@@ -122,7 +122,6 @@ public class Controller {
 
         switch (rootInActiveWindow.getPackageName().toString()){
             case Constants.FACEBOOK_PACKAGE:
-                //TODO IMPLEMENT
                 treeCrawlers.runNodeTreeFacebook(rootInActiveWindow, counter, imageBound);
                 treeCrawlers.runNodeTreeForFacebookAltText(rootInActiveWindow);
                 analyseTreeRun(Constants.FACEBOOK_PACKAGE, counter, imageBound);
@@ -147,7 +146,6 @@ public class Controller {
 
         switch (appRun){
             case Constants.FACEBOOK_PACKAGE:
-
                 if(counter.getFeed() == Constants.FACEBOOK_FEED_COUNTER){
                     cleanVariables();
                 }
