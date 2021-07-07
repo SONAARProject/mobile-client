@@ -51,15 +51,14 @@ public class APIClient {
         call1.enqueue(new Callback<Message>() {
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {
-
                 Message message = response.body();
                 messageHandler.onSearchResponseMessage(message, socialNetwork);
-
             }
 
             @Override
             public void onFailure(Call<Message> call, Throwable t) {
                 t.printStackTrace();
+                messageHandler.onSearchResponseMessage(null, socialNetwork);
             }
 
         });
@@ -97,6 +96,7 @@ public class APIClient {
             @Override
             public void onFailure(Call<Message> call, Throwable t) {
                 t.printStackTrace();
+                messageHandler.onSearchResponseMessage(null, socialNetwork);
             }
 
         });

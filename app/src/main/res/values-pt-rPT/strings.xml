@@ -52,4 +52,5 @@
     <string name="permission_refuse">Permissão recusada, tem que dar perssiões de armazenamento no menu de infromações da aplicação</string>
     <string name="study_1"><![CDATA[Estamos à procura de participantes num <a href="http://www.di.fc.ul.pt/~cad/SONAAR/pt/recruitment.html">estudo</a> para nos ajudar a melhorar o SONAAR e a qualidade das descrções de imagens na internet.]]></string>
     <string name="study_2"><![CDATA[Se desejar participar <a href="https://forms.office.com/pages/responsepage.aspx?id=AIX6C_KxZkW68W9ZNwiT5yY5gSqckrxFolbQyc5XHrFUNDU2M0gwMEJGWDhWSzZRRFFEODNYODJCQS4u">preencha este formulário</a>, por favor]]></string>
+    <string name="something_went_wrong">Não foi possível realizar o seu pedido, por favor tente mais tarde.</string>
 </resources>

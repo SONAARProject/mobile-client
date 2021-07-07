@@ -1,6 +1,7 @@
 package pt.fcul.lasige.sonaar.api;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -44,8 +45,10 @@ public class MessageHandler implements IMessageHandler {
 
             notificationController.sendNotification(socialNetwork, altsList, conceptsList, textList);
         }else {
-            if(Constants.PRINT_API_RESPONSE)
+            if(Constants.PRINT_API_RESPONSE){
                 Log.d("APIRESPONSE", "EMPTY RESPONSE");
+                notificationController.sendNotification(null, null, null, null);
+            }
         }
     }
 

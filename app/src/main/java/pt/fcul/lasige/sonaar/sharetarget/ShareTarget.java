@@ -91,34 +91,38 @@ public class ShareTarget extends AppCompatActivity implements View.OnClickListen
                             activity.runOnUiThread(() -> Glide.with(getApplicationContext()).load(bitmap).into(iv));
                             ByteArrayOutputStream bos = new ByteArrayOutputStream();
                             bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
-                           APIClient.searchImageFile(
+                            APIClient.searchImageFile(
                                     bos.toByteArray(),
                                     (message, socialNetwork) -> {
                                         pd.dismiss();
-                                        if (message.alts != null){
-                                            try {
-                                                JSONArray array = new JSONArray(message.alts);
-                                                ArrayList<String> alts = new ArrayList<String>();
+                                        if(message == null){
+                                            activity.runOnUiThread(() -> alt.setText(getString(R.string.something_went_wrong)));
+                                        }else {
+                                            if (message.alts != null){
+                                                try {
+                                                    JSONArray array = new JSONArray(message.alts);
+                                                    ArrayList<String> alts = new ArrayList<String>();
 
-                                                for (int i=0;i<array.length();i++){
-                                                    JSONObject jsonObject = array.getJSONObject(i);
-                                                    alts.add(jsonObject.getString("AltText"));
+                                                    for (int i=0;i<array.length();i++){
+                                                        JSONObject jsonObject = array.getJSONObject(i);
+                                                        alts.add(jsonObject.getString("AltText"));
+                                                    }
+
+                                                    Controller.getInstance().setSonaarAltText(alts.get(0));
+                                                    activity.runOnUiThread(() -> alt.setText(alts.get(0)));
+
+                                                    mAdapter.setLocalDataSet(alts);
+                                                    if (alts.size() > 1)
+                                                        activity.runOnUiThread(() -> findViewById(R.id.bt_show_more).setVisibility(View.VISIBLE));
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
                                                 }
-
-                                                Controller.getInstance().setSonaarAltText(alts.get(0));
-                                                activity.runOnUiThread(() -> alt.setText(alts.get(0)));
-
-                                                mAdapter.setLocalDataSet(alts);
-                                                if (alts.size() > 1)
-                                                    activity.runOnUiThread(() -> findViewById(R.id.bt_show_more).setVisibility(View.VISIBLE));
-
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
+                                            }else if (message.concepts != null){
+                                                String[] data = message.concepts.replace("\"","").split(",");
+                                                String concepts = String.join(", ", data);
+                                                activity.runOnUiThread(() -> alt.setText(String.format(getString(R.string.notification_text_alt_not_found_none), concepts)));
                                             }
-                                        }else if (message.concepts != null){
-                                            String[] data = message.concepts.replace("\"","").split(",");
-                                            String concepts = String.join(", ", data);
-                                            activity.runOnUiThread(() -> alt.setText(String.format(getString(R.string.notification_text_alt_not_found_none), concepts)));
                                         }
                                     },
                                     MessageHandler.SOCIAL_NETWORK.NONE,
