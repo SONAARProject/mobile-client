@@ -72,12 +72,12 @@ public class SettingsActivity extends AppCompatActivity {
                 Toast.makeText(getActivity(), "Screenshot consent revoked, please close the app.", Toast.LENGTH_SHORT).show();
                 return false;
             });
-            final Preference reportProblem = findPreference("report_problem");
-            reportProblem.setOnPreferenceClickListener(preference -> {
-                Intent i = new Intent(getContext(), ReportProblemForm.class);
-                startActivity(i);
-                return false;
-            });
+//            final Preference reportProblem = findPreference("report_problem");
+//            reportProblem.setOnPreferenceClickListener(preference -> {
+//                Intent i = new Intent(getContext(), ReportProblemForm.class);
+//                startActivity(i);
+//                return false;
+//            });
         }
     }
 }
