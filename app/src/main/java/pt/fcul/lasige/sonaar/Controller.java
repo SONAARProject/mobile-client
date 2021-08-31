@@ -128,8 +128,6 @@ public class Controller {
                 break;
             case Constants.INSTAGRAM_PACKAGE:
                 //TODO IMPLEMENT
-                treeCrawlers.runNodeTreeInstagram(rootInActiveWindow, counter);
-                analyseTreeRun(Constants.INSTAGRAM_PACKAGE, counter, null);
                 break;
             case Constants.TWITTER_PACKAGE:
                 //get the View size to crop the screenshot
@@ -211,49 +209,89 @@ public class Controller {
 
             public void onFinish() {
                 Overlay.getInstance().removeScreensShotCountDown();
-                new Handler().postDelayed(() -> {
-                    //give time to the keyboard disappear
-                    //and take the screenshot
-                    AccessibilityServiceUtils.takeScreenshot(service);
 
-                    // activate back the keyboard
-                    AccessibilityServiceUtils.showKeyboard(service);
+                //allow time the the message of the screenshot to disappear
+                new CountDownTimer(1000, 1000) {
+                    public void onTick(long millisUntilFinished) { }
 
-                    Overlay.getInstance().showApiCall();
-                    new CountDownTimer(7500, 1000) {
+                    public void onFinish() {
 
-                        public void onTick(long millisUntilFinished) {
-                        }
+                        //and take the screenshot
+                        AccessibilityServiceUtils.takeScreenshot(service);
 
-                        public void onFinish() {
-                            Overlay.getInstance().removeApiCall();
-                            //give time to the screenshot to be written to disk
-                            //crop the image and send the encoded image to our backend
-                            //for searching an alt text
-                            currentImage = ImageUtils.getImageToAPI(
-                                    service,
-                                    bitMapCutoutX,
-                                    bitMapCutoutY,
-                                    bitMapCutoutWidth,
-                                    bitMapCutoutHeight);
+                        new CountDownTimer(2500, 500) {
 
-                            if (currentImage == null){
-                                Toast.makeText(service, service.getString(R.string.error_read_screenshot), Toast.LENGTH_SHORT).show();
-                            }else {
-                                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(service.getApplicationContext());
-                                String uuid = prefs.getString(getString(R.string.uuid), "null");
-                                APIClient.searchImageFile(
-                                        currentImage,
-                                        messageHandler,
-                                        socialNetwork,
-                                        "suggestion",
-                                        uuid);
+                            public void onTick(long millisUntilFinished) {
                             }
-                        }
 
-                    }.start();
+                            public void onFinish() {
 
-                }, 1500);
+                                // activate back the keyboard
+                                AccessibilityServiceUtils.showKeyboard(service);
+
+                                //let the user know that we are searching
+                                Overlay.getInstance().showApiCall();
+
+                                new CountDownTimer(5000, 1000) {
+
+                                    public void onTick(long millisUntilFinished) {
+                                    }
+
+                                    public void onFinish() {
+
+                                        Overlay.getInstance().removeApiCall();
+                                        //give time to the screenshot to be written to disk
+                                        //crop the image and send the encoded image to our backend
+                                        //for searching an alt text
+                                        currentImage = ImageUtils.getImageToAPI(
+                                                service,
+                                                bitMapCutoutX,
+                                                bitMapCutoutY,
+                                                bitMapCutoutWidth,
+                                                bitMapCutoutHeight);
+
+                                        if (currentImage == null) {
+                                            Toast.makeText(service, service.getString(R.string.error_read_screenshot), Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(service.getApplicationContext());
+                                            String uuid = prefs.getString(getString(R.string.uuid), "null");
+                                            APIClient.searchImageFile(
+                                                    currentImage,
+                                                    messageHandler,
+                                                    socialNetwork,
+                                                    "suggestion",
+                                                    uuid);
+                                        }
+                                    }
+
+                                }.start();
+//                            Overlay.getInstance().removeApiCall();
+//                            //give time to the screenshot to be written to disk
+//                            //crop the image and send the encoded image to our backend
+//                            //for searching an alt text
+//                            currentImage = ImageUtils.getImageToAPI(
+//                                    service,
+//                                    bitMapCutoutX,
+//                                    bitMapCutoutY,
+//                                    bitMapCutoutWidth,
+//                                    bitMapCutoutHeight);
+//
+//                            if (currentImage == null){
+//                                Toast.makeText(service, service.getString(R.string.error_read_screenshot), Toast.LENGTH_SHORT).show();
+//                            }else {
+//                                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(service.getApplicationContext());
+//                                String uuid = prefs.getString(getString(R.string.uuid), "null");
+//                                APIClient.searchImageFile(
+//                                        currentImage,
+//                                        messageHandler,
+//                                        socialNetwork,
+//                                        "suggestion",
+//                                        uuid);
+//                            }
+                            }
+                        }.start();
+                    }
+                }.start();
             }
 
         }.start();

@@ -14,8 +14,8 @@ public class TreeCrawlers {
         if (node == null)
             return;
 
-        if(node.getParent() != null && node.getParent().getParent() != null){
-            if(node.getClassName().toString().contains("android.widget.Button") && node.getContentDescription() == null && node.getParent().getClassName().toString().contains("android.view.ViewGroup") && node.getParent().getParent().getClassName().toString().contains("android.widget.ScrollView")){
+        if (node.getParent() != null && node.getParent().getParent() != null && node.getClassName() != null && node.getParent().getClassName() != null && node.getParent().getParent().getClassName() != null) {
+            if (node.getClassName().toString().contains("android.widget.Button") && node.getContentDescription() == null && node.getParent().getClassName().toString().contains("android.view.ViewGroup") && node.getParent().getParent().getClassName().toString().contains("android.widget.ScrollView")) {
                 node.getBoundsInScreen(imageBound);
             }
         }
@@ -23,8 +23,7 @@ public class TreeCrawlers {
         if (node.getContentDescription() != null) {
             if (node.getContentDescription().toString().equals("Photo") || node.getContentDescription().toString().equals("Foto")) {
                 node.getBoundsInScreen(imageBound);
-                counter.incPost();
-            } else if (node.getContentDescription().toString().equals("Tap to edit your photo") || node.getContentDescription().toString().equals("Toca para editares a tua foto")) {
+            } else if (node.getContentDescription().toString().equals("Add More") || node.getContentDescription().toString().equals("Adicionar mais")) {
                 counter.incPost();
             } else if (node.getContentDescription().toString().equals("Remove Photo") || node.getContentDescription().toString().equals("Remover foto")) {
                 counter.incPost();
@@ -32,17 +31,17 @@ public class TreeCrawlers {
                 counter.incPost();
             } else if (node.getContentDescription().toString().equals("Edit Photo") || node.getContentDescription().toString().equals("Editar foto")) {
                 counter.incPost();
-            }else if (node.getContentDescription().toString().equals("Live") || node.getContentDescription().toString().equals("Direto")) {
+            } else if (node.getContentDescription().toString().equals("Live") || node.getContentDescription().toString().equals("Direto")) {
                 counter.incFeed();
             } else if (node.getContentDescription().toString().equals("Photo") || node.getContentDescription().toString().equals("Foto")) {
                 counter.incFeed();
             } else if (node.getContentDescription().toString().equals("Room")) {
                 counter.incFeed();
-            }else if (node.getContentDescription().toString().equals("Edit Alt Text") || node.getContentDescription().toString().equals("Editar o texto alternativo")) {
+            } else if (node.getContentDescription().toString().equals("Edit Alt Text") || node.getContentDescription().toString().equals("Editar o texto alternativo")) {
                 counter.incAltText();
-            }else if (node.getContentDescription().toString().equals("Add alternative text that describes the contents of the photo for people with visual impairments.") || node.getContentDescription().toString().equals("Adiciona texto alternativo que descreva os conteúdos da foto para pessoas com deficiência visual.")) {
+            } else if (node.getContentDescription().toString().equals("Add alternative text that describes the contents of the photo for people with visual impairments.") || node.getContentDescription().toString().equals("Adiciona texto alternativo que descreva os conteúdos da foto para pessoas com deficiência visual.")) {
                 counter.incAltText();
-            }else if (node.getContentDescription().toString().equals("Save") || node.getContentDescription().toString().equals("Guardar")) {
+            } else if (node.getContentDescription().toString().equals("Save") || node.getContentDescription().toString().equals("Guardar")) {
                 counter.incAltText();
             }
         }
@@ -52,7 +51,7 @@ public class TreeCrawlers {
                 counter.incPost();
             } else if (node.getText().toString().equals("Create Post") || node.getText().toString().equals("Criar publicação")) {
                 counter.incPost();
-            }else if (node.getText().toString().contains("Write photo alternative text") || node.getText().toString().contains("Escreve o texto alternativo da foto")) {
+            } else if (node.getText().toString().contains("Write photo alternative text") || node.getText().toString().contains("Escreve o texto alternativo da foto")) {
                 counter.incAltText();
             }
         }
@@ -69,47 +68,23 @@ public class TreeCrawlers {
 
         if (node.getViewIdResourceName() != null) {
             if (node.getViewIdResourceName().equals("com.twitter.android:id/media_attachments")) {
-                if ( node.getChild(0).getChild(0) == null)
+                if (node.getChild(0).getChild(0) == null)
                     node.getChild(0).getBoundsInScreen(imageBound);
                 else
                     node.getChild(0).getChild(0).getBoundsInScreen(imageBound);
                 counter.incPost();
-            }else if (node.getViewIdResourceName().equals("com.twitter.android:id/composer_add_tweet")) {
+            } else if (node.getViewIdResourceName().equals("com.twitter.android:id/composer_add_tweet")) {
                 counter.incPost();
-            }else if (node.getViewIdResourceName().equals("com.twitter.android:id/found_media")) {
+            } else if (node.getViewIdResourceName().equals("com.twitter.android:id/found_media")) {
                 counter.incPost();
-            }else if (node.getViewIdResourceName().equals("com.twitter.android:id/gallery")) {
+            } else if (node.getViewIdResourceName().equals("com.twitter.android:id/gallery")) {
                 counter.incPost();
-            }else if (node.getViewIdResourceName().equals("com.twitter.android:id/drawer_layout")) {
+            } else if (node.getViewIdResourceName().equals("com.twitter.android:id/drawer_layout")) {
                 counter.incFeed();
-            }else if (node.getViewIdResourceName().equals("com.twitter.android:id/composer_write")) {
+            } else if (node.getViewIdResourceName().equals("com.twitter.android:id/composer_write")) {
                 counter.incFeed();
             }
         }
-//        if (node.getContentDescription() != null) {
-//            if (node.getContentDescription().toString().equals("Navigate up")) {
-//                counter.inc();
-//            } else if (node.getContentDescription().toString().equals("Attached photo.")) {
-//                node.getBoundsInScreen(imageBound);
-//                counter.inc();
-//            } else if (node.getContentDescription().toString().equals("Add a Tweet")) {
-//                counter.inc();
-//            } else if (node.getContentDescription().toString().contains("Tweet length")) {
-//                counter.inc();
-//            } else if (node.getContentDescription().toString().equals("Tap to edit your photo")) {
-//                counter.inc();
-//            } else if (node.getContentDescription().toString().contains("characters left") || node.getContentDescription().toString().contains("character left")) {
-//                counter.inc();
-//            }
-//        }
-//        if (node.getText() != null) {
-//            if (node.getText().toString().equals("TWEET")) {
-//                counter.inc();
-//            }
-//            if (node.getText().toString().equals("Add a comment…")) {
-//                counter.inc();
-//            }
-//        }
 
         for (int i = 0; i < node.getChildCount(); i++) {
             runNodeTreeTwitter(node.getChild(i), counter, imageBound);
@@ -135,11 +110,11 @@ public class TreeCrawlers {
                 counter.incPost();
             } else if (node.getText().toString().equals("Write a caption…")) {
                 counter.incPost();
-            }else if (node.getText().toString().equals("Also post to")) {
+            } else if (node.getText().toString().equals("Also post to")) {
                 counter.incPost();
-            }else if (node.getText().toString().equals("Advanced Settings")) {
+            } else if (node.getText().toString().equals("Advanced Settings")) {
                 counter.incPost();
-            }else if (node.getText().toString().equals("New Post")) {
+            } else if (node.getText().toString().equals("New Post")) {
                 counter.incPost();
             }
         }
@@ -154,11 +129,11 @@ public class TreeCrawlers {
         if (node == null)
             return;
 
-        if (node.getClassName().toString().contains("android.widget.EditText")) {
-            if(Controller.getInstance().getSonaarAltText() != null &&
+        if (node.getClassName() != null && node.getClassName().toString().contains("android.widget.EditText")) {
+            if (Controller.getInstance().getSonaarAltText() != null &&
                     !Controller.getInstance().getSonaarAltText().isEmpty() &&
                     Controller.getInstance().canISetAltText()
-            ){
+            ) {
                 Bundle arguments = new Bundle();
                 arguments.putCharSequence(AccessibilityNodeInfo
                         .ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, Controller.getInstance().getSonaarAltText() + " " + Controller.getInstance().getString(R.string.alt_text_by_sonaar));
@@ -181,10 +156,10 @@ public class TreeCrawlers {
 
         if (node.getViewIdResourceName() != null) {
             if (node.getViewIdResourceName().equals("com.twitter.android:id/alt_text_edit")) {
-                if(Controller.getInstance().getSonaarAltText() != null &&
+                if (Controller.getInstance().getSonaarAltText() != null &&
                         !Controller.getInstance().getSonaarAltText().isEmpty() &&
                         Controller.getInstance().canISetAltText()
-                ){
+                ) {
                     Bundle arguments = new Bundle();
                     arguments.putCharSequence(AccessibilityNodeInfo
                             .ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, Controller.getInstance().getSonaarAltText() + " " + Controller.getInstance().getString(R.string.alt_text_by_sonaar));
