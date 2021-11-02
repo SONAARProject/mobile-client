@@ -47,7 +47,14 @@ public class APIClient {
 
     public static void searchImageUrl(String url, IMessageHandler messageHandler, MessageHandler.SOCIAL_NETWORK socialNetwork, String uid){
 
-        Call<Message> call1 = getClient().create(APIInterface.class).searchImageUrl(url, Locale.getDefault().getLanguage(), "authoring", "app", uid);
+        String lang;
+        if(!Locale.getDefault().getLanguage().equals("pt") && !Locale.getDefault().getLanguage().equals("en")){
+            lang = "en";
+        }else {
+            lang = Locale.getDefault().getLanguage();
+        }
+
+        Call<Message> call1 = getClient().create(APIInterface.class).searchImageUrl(url, lang, "authoring", "app", uid);
         call1.enqueue(new Callback<Message>() {
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {
@@ -67,17 +74,24 @@ public class APIClient {
     public static void searchImageFile(byte[] bytes, IMessageHandler messageHandler, MessageHandler.SOCIAL_NETWORK socialNetwork, String type, String uid){
         Call<Message> call;
 
+        String lang;
+        if(!Locale.getDefault().getLanguage().equals("pt") && !Locale.getDefault().getLanguage().equals("en")){
+            lang = "en";
+        }else {
+            lang = Locale.getDefault().getLanguage();
+        }
+
         if(socialNetwork.toString().equals("none")){
             call = getClient().create(APIInterface.class)
                     .searchImageBinary(Base64.encodeToString(bytes, Base64.NO_WRAP),
-                            Locale.getDefault().getLanguage(),
+                            lang,
                             type,
                             "app",
                             uid);
         }else {
             call = getClient().create(APIInterface.class)
                     .searchImageBinary(Base64.encodeToString(bytes, Base64.NO_WRAP),
-                            Locale.getDefault().getLanguage(),
+                            lang,
                             type,
                             "app",
                             socialNetwork.toString(),
@@ -104,12 +118,19 @@ public class APIClient {
 
     public static void insertImageAndAltText(byte[] bytes, String altText, String postText, MessageHandler.SOCIAL_NETWORK socialNetwork, String uid){
 
+        String lang;
+        if(!Locale.getDefault().getLanguage().equals("pt") && !Locale.getDefault().getLanguage().equals("en")){
+            lang = "en";
+        }else {
+            lang = Locale.getDefault().getLanguage();
+        }
+
         Call<Message> call = getClient().create(APIInterface.class).insertBase64(
                 Base64.encodeToString(bytes, Base64.NO_WRAP),
                 "authoring",
                 altText,
                 postText,
-                Locale.getDefault().getLanguage(),
+                lang,
                 uid,
                 "app",
                 socialNetwork.toString());

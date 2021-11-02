@@ -32,6 +32,7 @@ import androidx.core.content.ContextCompat;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Locale;
 import java.util.UUID;
 
 import pt.fcul.lasige.sonaar.accessibleservice.AccessibilityServiceClass;
@@ -45,6 +46,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(!Locale.getDefault().getLanguage().equals("pt") && !Locale.getDefault().getLanguage().equals("en")){
+            Toast.makeText(getApplicationContext(),
+                    R.string.language_not_supported,
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

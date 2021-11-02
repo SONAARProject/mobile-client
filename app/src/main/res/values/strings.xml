@@ -55,4 +55,5 @@
     <string name="study_1"><![CDATA[We are looking for participants in a <a href="http://www.di.fc.ul.pt/~cad/SONAAR/recruitment.html">study</a> to help us improve SONAAR and the quality of image descriptions on the internet.]]></string>
     <string name="study_2"><![CDATA[If you wish to participate please <a href="https://forms.office.com/pages/responsepage.aspx?id=AIX6C_KxZkW68W9ZNwiT5yY5gSqckrxFolbQyc5XHrFUNDU2M0gwMEJGWDhWSzZRRFFEODNYODJCQS4u">fill out this form</a>]]></string>
     <string name="something_went_wrong">Something went wrong with your request, please try again later.</string>
+    <string name="language_not_supported" translatable="false">Your phone language is not supported by SONAAR. All the content will be displayed in english but the app may be unstable.</string>
 </resources>
